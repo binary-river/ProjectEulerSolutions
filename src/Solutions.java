@@ -228,12 +228,28 @@ public class Solutions {
     }
 
     void solution8() {
+        /**
+         * Find greatest product of 13 adjacent numbers
+         */
         String fileName = "./src/input/solution8_input.txt";
+        String contents = "";
+        int adjacentCnt = 13;
+        long greatestProduct = 0L;
+
         try {
-            System.out.println("string : " + getFileByOneline(new File(fileName)));
+            contents = getFileByOneline(new File(fileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("contents : " + contents);
+        for (int i = 0; i < contents.length()-(adjacentCnt-1); i++) {
+            long temp = 1L;
+            for(int j=0; j<adjacentCnt; j++) temp = temp * Long.parseLong(contents.charAt(i+j)+"");
+            if( temp > greatestProduct ) greatestProduct = temp;
+        }
+
+        System.out.println("greatestProduct : " + greatestProduct);
     }
 
     /**********************************************************************************************************/
