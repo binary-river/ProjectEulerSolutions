@@ -255,7 +255,7 @@ public class Solutions {
 
     void solutions9() {
         /**
-         * Find the product of a,b,c which is pythagorean triplet for which a+b+c = 1000 ( a < b < c )
+         * Find the product of a,b,c which is pythagorean triplet for which a+b+c = 1000 ( a < b < c )  
          */
 
         long a =0L,b =0L,c = 0L;
