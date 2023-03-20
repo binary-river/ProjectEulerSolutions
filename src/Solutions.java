@@ -18,7 +18,8 @@ public class Solutions {
 //        solution5_2();
 //        solutions6();
 //        solution7();
-        solution8();
+//        solution8();
+        solutions9();
     }
 
 
@@ -250,6 +251,36 @@ public class Solutions {
         }
 
         System.out.println("greatestProduct : " + greatestProduct);
+    }
+
+    void solutions9() {
+        /**
+         * Find the product of a,b,c which is pythagorean triplet for which a+b+c = 1000 ( a < b < c )
+         */
+
+        long a =0L,b =0L,c = 0L;
+        long max = 1000L;
+        long maxProduct = 0L;
+        long[] nums = new long[3];
+
+        // a < b < c
+        // a + b must be bigger than c
+        while (true) {
+            a++;
+            for (b = a+1; b < max/2L; b++) {
+                c = max - (a + b);
+                if( a+b < c ) continue;
+                if( a*a + b*b != c*c ) continue;
+                if( maxProduct < a*b*c ) maxProduct = a*b*c;
+                nums[0] = a;
+                nums[1] = b;
+                nums[2] = c;
+            }
+            if( a >= max/3L ) break;
+        }
+
+        System.out.println("maxProduct : "  + maxProduct);
+        System.out.println("nums : " + nums[0] + ", " + nums[1] + ", " + nums[2] );
     }
 
     /**********************************************************************************************************/
