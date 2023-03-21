@@ -19,7 +19,8 @@ public class Solutions {
 //        solutions6();
 //        solution7();
 //        solution8();
-        solutions9();
+//        solutions9();
+        solutions10();
     }
 
 
@@ -281,6 +282,22 @@ public class Solutions {
 
         System.out.println("maxProduct : "  + maxProduct);
         System.out.println("nums : " + nums[0] + ", " + nums[1] + ", " + nums[2] );
+    }
+
+    void solutions10() {
+        /**
+         * Find the sum of all the primes below two million
+         */
+
+        long sum = 0L;
+        long limit = 2000000L;
+
+        for (long i = 2; i < limit; i++) {
+            if( validPrimeNumber(i) ) sum += i;
+        }
+
+        System.out.println("sum : " + sum);
+
     }
 
     /**********************************************************************************************************/
