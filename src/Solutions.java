@@ -16,11 +16,12 @@ public class Solutions {
 //        solution4_2();
 //        solution5();
 //        solution5_2();
-//        solutions6();
+//        solution6();
 //        solution7();
 //        solution8();
-//        solutions9();
-        solutions10();
+//        solution9();
+//        solution10();
+        solution11();
     }
 
 
@@ -188,7 +189,7 @@ public class Solutions {
         System.out.println("result : " + lcm);
     }
 
-    void solutions6() {
+    void solution6() {
         /**
          * Find difference between (1+2+..+n)^2 and 1^2+2^2+...+n^2
          */
@@ -254,7 +255,7 @@ public class Solutions {
         System.out.println("greatestProduct : " + greatestProduct);
     }
 
-    void solutions9() {
+    void solution9() {
         /**
          * Find the product of a,b,c which is pythagorean triplet for which a+b+c = 1000 ( a < b < c )   
          */
@@ -284,7 +285,7 @@ public class Solutions {
         System.out.println("nums : " + nums[0] + ", " + nums[1] + ", " + nums[2] );
     }
 
-    void solutions10() {
+    void solution10() {
         /**
          * Find the sum of all the primes below two million
          */
@@ -300,7 +301,112 @@ public class Solutions {
 
     }
 
+    void solution11() {
+        /**
+         * Find the greatest product of four adjacent numbers in the same direction(up, down, right, left, diagonal
+         */
+        String fileName = "./src/input/solution11_input.txt";
+        File file = new File(fileName);
+        String[][] s = new String[1][1];
+
+        try {
+            s = getFileBySquareArray(file, " ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (String[] strings : s) {
+            StringBuilder sb = new StringBuilder();
+            for (String string : strings) {
+                sb.append(string);
+                sb.append(" ");
+            }
+            System.out.println(sb.toString());
+        }
+
+        /**
+         * move from zero to end. check size: 4 square.
+         * left -> right moving unit : 1
+         * up   -> down moving unit  : 1
+         */
+
+        int adjacentUnit = 4;
+        int width  = s[0].length;
+        int height = s.length;
+
+        //continue..
+    }
+
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param square ( 2 dimensional integer array )
+     * @return get max product of adjacent numbers in input square. adjacent unit is height of sqaure
+     */
+    long getMaxProductOfAdjacentFromSquare(int[][] square) {
+        int size = square.length;
+        long maxProduct = 0L;
+
+        /* calculate horizontal adjacent numbers */
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+            }
+        }
+
+        /* calculate vertical adjacent numbers */
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if( maxProduct < square[j][i] ) maxProduct = square[j][i];
+            }
+        }
+
+        /* calculate diagonal adjacent numbers */
+        for (int i = 0, j = 0; i < size && j < size; i++, j++) {
+            if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+        }
+
+        for (int i = 0, j = size-1; i < size && j >= 0; i++, j--) {
+            if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+        }
+
+        return maxProduct;
+    }
+
+    /**
+     *
+     * @param file
+     * @param separator
+     * @return 2 dimension array that contains file contents. ( file should be writed in 2 dimension form )
+     *         characters in one line are separated by input separator  )
+     */
+    String[][] getFileBySquareArray(File file, String separator) throws IOException {
+
+        ArrayList<String[]> resultTemp = new ArrayList<>();  //temp result
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        while (true) {
+            String line = br.readLine();
+            if( line == null ) break;
+            String[] splitedLine = line.split(separator);
+            resultTemp.add(splitedLine);
+        }
+
+        int rowCnt = resultTemp.size();
+        int colCnt = resultTemp.get(0).length;
+
+        String[][] result = new String[rowCnt][colCnt];
+        int r = 0;
+        for (String[] line : resultTemp) {
+            for (int i = 0; i < line.length; i++) {
+                result[r][i] = line[i];
+            }
+            r++;
+        }
+
+        return result;
+    }
 
     /**
      *
