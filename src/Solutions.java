@@ -334,7 +334,37 @@ public class Solutions {
         int width  = s[0].length;
         int height = s.length;
 
-        //continue..
+        int i=0; /* height */
+        int j=0; /* width */
+        long maxProduct = 0L;
+
+        while (true) {
+            /* make an unit square */
+            long[][] square = new long[adjacentUnit][adjacentUnit];
+            for (int k = 0; k < adjacentUnit; k++) {
+                for (int l = 0; l < adjacentUnit; l++) {
+                    square[k][l] = Long.parseLong(s[i + k][j + l]);
+                }
+            }
+
+            /* get max product of unit square */
+            long tempProduct = getMaxProductOfAdjacentFromSquare(square);
+
+            if( tempProduct > maxProduct ) maxProduct = tempProduct;
+
+            j++;
+            if (j > width - adjacentUnit) {
+                i++;
+                j = 0;
+            }
+
+            if (i > height - adjacentUnit) {
+                break;
+            }
+        }
+
+        System.out.println("max product : " + maxProduct);
+
     }
 
     /**********************************************************************************************************/
@@ -344,32 +374,41 @@ public class Solutions {
      * @param square ( 2 dimensional integer array )
      * @return get max product of adjacent numbers in input square. adjacent unit is height of sqaure
      */
-    long getMaxProductOfAdjacentFromSquare(int[][] square) {
+    long getMaxProductOfAdjacentFromSquare(long[][] square) {
         int size = square.length;
         long maxProduct = 0L;
+        long tempProduct = 1L;
 
         /* calculate horizontal adjacent numbers */
         for (int i = 0; i < size; i++) {
+            tempProduct = 1L;
             for (int j = 0; j < size; j++) {
-                if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+                tempProduct = tempProduct * square[i][j];
             }
+            if( tempProduct > maxProduct ) maxProduct = tempProduct;
         }
 
         /* calculate vertical adjacent numbers */
         for (int i = 0; i < size; i++) {
+            tempProduct = 1L;
             for (int j = 0; j < size; j++) {
-                if( maxProduct < square[j][i] ) maxProduct = square[j][i];
+                tempProduct = tempProduct * square[j][i];
             }
+            if( tempProduct > maxProduct ) maxProduct = tempProduct;
         }
 
         /* calculate diagonal adjacent numbers */
+        tempProduct = 1L;
         for (int i = 0, j = 0; i < size && j < size; i++, j++) {
-            if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+            tempProduct = tempProduct * square[i][j];
         }
+        if( tempProduct > maxProduct ) maxProduct = tempProduct;
 
+        tempProduct = 1L;
         for (int i = 0, j = size-1; i < size && j >= 0; i++, j--) {
-            if( maxProduct < square[i][j] ) maxProduct = square[i][j];
+            tempProduct = tempProduct * square[i][j];;
         }
+        if( tempProduct > maxProduct ) maxProduct = tempProduct;
 
         return maxProduct;
     }
