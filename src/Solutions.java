@@ -1,4 +1,5 @@
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,8 @@ public class Solutions {
 //        solution9();
 //        solution10();
 //        solution11();
-        solution12();
+//        solution12();
+        solution13();
 
     }
 
@@ -395,6 +397,42 @@ public class Solutions {
 
         System.out.println("first triangle number to have over five hundred divisors : " + triangleNumber);
 
+    }
+
+
+    void solution13() {
+        /**
+         * Print first 10 digit of sum of one-hundred 50-digit numbers in file
+         */
+        BigDecimal result = new BigDecimal(0L);
+        String filename = "./src/input/solution13_input.txt";
+
+
+        // read and sum line by line
+        try {
+            File file = new File(filename);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = null;
+
+            while ((line = br.readLine()) != null) {
+                result = result.add(new BigDecimal(line));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("result : " + result.toString());
+
+        String resultString = result.toString();
+        StringBuilder sb = new StringBuilder();
+
+        //print first 10 digits
+        for (int i = 0; i < 10; i++) {
+            sb.append(resultString.charAt(i) + "");
+        }
+
+        System.out.println("first 10 digit of result : "+ sb.toString());
     }
 
     /**********************************************************************************************************/
