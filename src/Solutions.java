@@ -24,7 +24,8 @@ public class Solutions {
 //        solution10();
 //        solution11();
 //        solution12();
-        solution13();
+//        solution13();
+        solution14();
 
     }
 
@@ -435,7 +436,60 @@ public class Solutions {
         System.out.println("first 10 digit of result : "+ sb.toString());
     }
 
+    void solution14() {
+        /**
+         * Find starting number of the longest collatz chain.
+         *  - start number must be under one million
+         *  - number can go above one million except starting number
+         *  Collatz sequence' formula
+         *  : n -> n/2  ( n is even )
+         *    n -> 3n+1 ( n id odd  )
+         */
+
+        long limit = 1000000L;
+        long maxStartingNumber = 0L;
+        long maxCount          = 0L;
+
+        for (long i = 1L; i < limit; i++) {
+            long collatzSequenceCount = getCollatzSequenceCount(i);
+            if (collatzSequenceCount > maxCount) {
+                maxStartingNumber = i;
+                maxCount = collatzSequenceCount;
+            }
+        }
+
+        System.out.println("max starting number : " + maxStartingNumber + ", max count : " + maxCount);
+
+    }
+
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param num
+     * @return count of collatz sequence ( starts from 1. include last chain to 1 )
+     */
+    long getCollatzSequenceCount(long num) {
+        long result = 1L;
+        long temp = num;
+        while (true) {
+            temp = getNextCollatzNumber(temp);
+            result++;
+
+            if( temp == 1 ) break;
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param num
+     * @return next collatz number ( num / 2 if num is even, else num * 3 + 1 will be returned )
+     */
+    long getNextCollatzNumber(long num) {
+        return num % 2 == 0 ? num / 2 : num * 3 + 1;
+    }
 
     /**
      *
