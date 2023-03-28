@@ -379,41 +379,45 @@ public class Solutions {
          *                                                      4th triangle number : 1+2+3+4
          */
         long i = 1L;
-        long tempTriangleNumber = 0L;
-        long tempCount  = 0L;
+        long triangleNumber = 0L;
+        long divisorCount  = 0L;
         while (true) {
             /* get Nth Triangle Number */
-            tempTriangleNumber = getNthTriangleNumber(i);
+            triangleNumber = getNthTriangleNumber(i);
             /* valid if triagle number above has over five hundred diviors */
-            if( (tempCount = getCountOfDivisors(tempTriangleNumber)) > 500 ) break;
+            if( (divisorCount = getCountOfDivisors(triangleNumber)) > 500 ) break;
 
-            System.out.println("triangle:" + tempTriangleNumber + ", count : "+ tempCount);
+            if (i % 1000 == 0) {
+                System.out.println("triangle:" + triangleNumber + ", count : "+ divisorCount);
+            }
             i++;
         }
 
-        System.out.println("first triangle number to have over five hundred divisors : " + i);
+        System.out.println("first triangle number to have over five hundred divisors : " + triangleNumber);
 
     }
 
     /**********************************************************************************************************/
 
-    /* now editing....*/
+    /**
+     *
+     * @param num
+     * @return return number of divisors input num has
+     */
     long getCountOfDivisors(long num) {
-        long result = 0L;
+        long result = 1L;
 
-        for (long i = 1L; i <= num/2L; i++) {
-            if (num % i == 0) {
-                //if middle of even number is divisor, then it should be count only once
-                if (i % 2 == 0 && i == num / 2L) {
-                    result++;
-                } else {
-                    result = result + 2;
-                }
-            }
+        Map<Long, Long> resultOfPrimeFactorization = getResultOfPrimeFactorization(num);
+        for (Map.Entry<Long, Long> longLongEntry : resultOfPrimeFactorization.entrySet()) {
+            Long key = longLongEntry.getKey();
+            Long value = longLongEntry.getValue();
+
+            result = result * (value+1);
         }
 
         return result;
     }
+
 
     /**
      * @param nth ( Nth )
@@ -587,7 +591,8 @@ public class Solutions {
     /**
      *
      * @param n : number need to be prime factorized
-     * @return a hashMap of prime factorization to input number
+     * @return a hashMap of prime factorization to input number( {2,2}, {3,5}... )
+     *                                                            2^2 * 3^5
      */
     Map<Long,Long> getResultOfPrimeFactorization(long n) {
 
