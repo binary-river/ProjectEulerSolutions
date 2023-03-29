@@ -459,10 +459,32 @@ public class Solutions {
         }
 
         System.out.println("max starting number : " + maxStartingNumber + ", max count : " + maxCount);
+    }
+
+    void solution15() {
+        /**
+         * 2x2 grid has 6 routes from top left corner to bottom right. ( it moves only to right or down == shortest path )
+         * Find count of all routes 20x20 grid has
+         */
 
     }
 
     /**********************************************************************************************************/
+
+
+    /**
+     *
+     * @param a
+     * @param b
+     * @return result of a Combination b ( aCb )
+     */
+    long getCombinationNaturally(int a, int b) {
+        long all = a + b;
+        long result = 1L;
+
+
+
+    }
 
     /**
      *
