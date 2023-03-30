@@ -2,6 +2,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Solutions {
@@ -25,7 +26,8 @@ public class Solutions {
 //        solution11();
 //        solution12();
 //        solution13();
-        solution14();
+//        solution14();
+        solution15();
 
     }
 
@@ -467,6 +469,8 @@ public class Solutions {
          * Find count of all routes 20x20 grid has
          */
 
+        /* getting shortest paths are same to getting combination of one direction positions ) */
+        System.out.println(getCombinationByPrime(40,20));
     }
 
     /**********************************************************************************************************/
@@ -474,16 +478,128 @@ public class Solutions {
 
     /**
      *
-     * @param a
-     * @param b
-     * @return result of a Combination b ( aCb )
+     * @param n
+     * @param r
+     * @return result of n Combination r ( nCr )
+     * it's faster and can handle bigger numbers than getCombinationNaturally because it uses reduction before calculate multiple
      */
-    long getCombinationNaturally(int a, int b) {
-        long all = a + b;
-        long result = 1L;
+    long getCombinationByPrime(int n, int r) {
+
+        /* get prime factors of multiples from n to n-r+1 */
+        /* get prime factors of multiples from r!         */
+        /* reduction                                      */
+
+        List<Integer> numeratorPrimes = new ArrayList<>();
+        List<Integer> denominatorPrimes = new ArrayList<>();
+        List<Integer> commonPrimes = new ArrayList<>();
+
+        /* get primes of numerators */
+        for (int i = n; i > n-r; i--) {
+            if( i == 1 ) continue;
+            numeratorPrimes.addAll(getListOfPrimeFactorization(i));
+        }
+
+        /* get primes of denominator */
+        for (int i = r; i > 0 ; i--) {
+            if( i == 1 ) continue;
+            denominatorPrimes.addAll(getListOfPrimeFactorization(i));
+        }
+
+        /* reduction numerators */
+        for (Integer denominatorPrime : denominatorPrimes) {
+            for (Integer numeratorPrime : numeratorPrimes) {
+                if (denominatorPrime == numeratorPrime) {
+                    numeratorPrimes.remove(denominatorPrime);
+                    commonPrimes.add(denominatorPrime);
+                    break;
+                }
+            }
+        }
+
+        /* reduction denominator */
+        for (Integer commonPrime : commonPrimes) {
+            for (Integer denominatorPrime : denominatorPrimes) {
+                if (commonPrime == denominatorPrime) {
+                    denominatorPrimes.remove(commonPrime);
+                    break;
+                }
+            }
+        }
+
+
+        long numerator = 1L;
+        long denominator = 1L;
+
+        for (Integer numeratorPrime : numeratorPrimes) {
+            numerator = numerator * numeratorPrime;
+        }
+
+        for (Integer denominatorPrime : denominatorPrimes) {
+            denominator = denominator * denominatorPrime;
+        }
+
+
+        return numerator / denominator;
+    }
+
+
+    /**
+     *
+     * @param num
+     * @return list of prime factors of input num. same prime factors might be listed unordered (ex. 24 --> 2,2,3,2 )
+     */
+    List<Integer> getListOfPrimeFactorization(int num) {
+
+        List<Integer> result = new ArrayList<>();
+
+        int midResult = num;
+        int denominator = 1;
+
+        while (true) {
+            denominator++;
+
+            if( midResult == 1 ) break;
+
+            if( !validPrimeNumber(denominator) ) continue;
+            if( midResult % denominator != 0 ) continue;
+
+            result.add(denominator);
+            midResult = midResult / denominator;
+
+            denominator = 1;
+        }
+
+        return result;
+    }
 
 
 
+
+    /**
+     *
+     * @param n
+     * @param r
+     * @return result of n Combination r ( nCr )
+     */
+    long getCombinationNaturally(int n, int r) {
+        long numerator = 1L;
+        long denominator = 1L;
+
+        /* numerator */
+        for (long i = 1L; i <= n; i++) {
+            numerator = numerator * i;
+        }
+
+        /* denominator */
+        for (long i = 1L; i <= r; i++) {
+            denominator = denominator * i;
+        }
+
+        for (long i = 1L; i <= n-r ; i++) {
+            denominator = denominator * i;
+        }
+
+        return numerator / denominator;
     }
 
     /**
