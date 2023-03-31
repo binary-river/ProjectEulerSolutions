@@ -29,7 +29,6 @@ public class Solutions {
 //        solution14();
 //        solution15();
         solution16();
-
     }
 
 
@@ -489,11 +488,13 @@ public class Solutions {
         String bdString = bd.toString();
 
         for (int i = 0; i < bdString.length(); i++) {
-            result += Long.parseLong(bdString.charAt(i) + "");
+//            result += Long.parseLong(bdString.charAt(i) + "");         // version 1
+            result += (long) ((byte) bdString.charAt(i) - (byte) '0');   // version 2
         }
 
         System.out.println("result : " + result);
     }
+
 
     /**********************************************************************************************************/
 
