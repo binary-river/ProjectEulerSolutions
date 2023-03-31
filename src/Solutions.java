@@ -27,7 +27,8 @@ public class Solutions {
 //        solution12();
 //        solution13();
 //        solution14();
-        solution15();
+//        solution15();
+        solution16();
 
     }
 
@@ -471,6 +472,27 @@ public class Solutions {
 
         /* getting shortest paths are same to getting combination of one direction positions ) */
         System.out.println(getCombinationByPrime(40,20));
+    }
+
+    void solution16() {
+        /**
+         * Find sum of digits of 2^1000 ( ex. sum of digits of 2^10 = 1024 = 1+0+2+4 = 7
+         */
+
+        int pow = 1000;
+        int unit = 2;
+        long result = 0L;
+
+        BigDecimal bd = new BigDecimal(unit);
+        bd = bd.pow(1000);
+
+        String bdString = bd.toString();
+
+        for (int i = 0; i < bdString.length(); i++) {
+            result += Long.parseLong(bdString.charAt(i) + "");
+        }
+
+        System.out.println("result : " + result);
     }
 
     /**********************************************************************************************************/
