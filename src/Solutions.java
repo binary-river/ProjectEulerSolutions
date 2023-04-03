@@ -503,14 +503,52 @@ public class Solutions {
          * ( Do not count spaces or hyphens )
          */
 
-        /* from 1 to 20, no static rules.
+        /* from 1 to 19, no static rules.
            from 21 to 99 could be spelled out by combination of tens-units
            from 100 to 999 could be spelled out by combination of hundreds and tens-units ( or hundreds and units )
          */
+
+        // need units spells ( 1-9 )
+        // need tens spells ( 10, 20, 30...90 )
+        // need unit spells ( 100, 1000 )
     }
 
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param num
+     * @return String of spells of input number ( 25 -> twenty-five )
+     */
+    String getSpellsOfNumber(int num) throws Exception{
+        String[] oneToNineteen = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+                "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"};
+        String[] tensWithoutTen = {"twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+
+        Map<Integer, String> spells = new HashMap<>();
+
+        for (int i = 0; i < oneToNineteen.length; i++) {
+            spells.put(i + 1, oneToNineteen[i]);
+        }
+
+        for (int i = 0; i < tensWithoutTen.length; i++) {
+            spells.put((i + 2) * 10, tensWithoutTen[i]);
+        }
+
+        spells.put(100, "hundred");
+        spells.put(1000, "thousand");
+
+        if( num <= 0 || num >= 100 ) throw Exception;
+
+
+        /**
+         *  rules
+         *  from 1 to 20, get value from map straightly
+         *  from 21 to 99, get combination value of tens-units
+         */
+
+    }
 
 
     /**
