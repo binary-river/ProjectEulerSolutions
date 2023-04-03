@@ -495,6 +495,20 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution17() {
+        /**
+         * Find count of spells of numbers from 1 to 1000.
+         *   20  -> twenty : 6
+         *   342 -> three hundred and forty-two : 23
+         * ( Do not count spaces or hyphens )
+         */
+
+        /* from 1 to 20, no static rules.
+           from 21 to 99 could be spelled out by combination of tens-units
+           from 100 to 999 could be spelled out by combination of hundreds and tens-units ( or hundreds and units )
+         */
+    }
+
 
     /**********************************************************************************************************/
 
