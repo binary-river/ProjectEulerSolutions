@@ -28,7 +28,8 @@ public class Solutions {
 //        solution13();
 //        solution14();
 //        solution15();
-        solution16();
+//        solution16();
+        solution17();
     }
 
 
@@ -503,14 +504,27 @@ public class Solutions {
          * ( Do not count spaces or hyphens )
          */
 
-        /* from 1 to 19, no static rules.
-           from 21 to 99 could be spelled out by combination of tens-units
-           from 100 to 999 could be spelled out by combination of hundreds and tens-units ( or hundreds and units )
-         */
+        /* get spells */
+        StringBuilder sb = new StringBuilder();
 
-        // need units spells ( 1-9 )
-        // need tens spells ( 10, 20, 30...90 )
-        // need unit spells ( 100, 1000 )
+        try {
+            for (int i = 1; i <= 1000; i++) {
+                sb.append(getSpellsOfNumber(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /* count spells */
+        String resultString = sb.toString();
+        long resultCnt = 0L;
+
+        for (int i = 0; i < resultString.length(); i++) {
+            if (resultString.charAt(i) != ' ' && resultString.charAt(i) != '-') resultCnt++;
+        }
+
+        System.out.println("count of spells of 1 - 1000 is.. : " + resultCnt);
+
     }
 
 
@@ -523,8 +537,8 @@ public class Solutions {
      */
     String getSpellsOfNumber(int num) throws Exception{
         String[] oneToNineteen = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
-                "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"};
-        String[] tensWithoutTen = {"twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+                , "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        String[] tensWithoutTen = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
 
         Map<Integer, String> spells = new HashMap<>();
 
@@ -539,16 +553,50 @@ public class Solutions {
         spells.put(100, "hundred");
         spells.put(1000, "thousand");
 
-        if( num <= 0 || num >= 100 ) throw Exception;
-
+        if( num <= 0 || num > 1000 ) throw new Exception();
 
         /**
          *  rules
-         *  from 1 to 20, get value from map straightly
-         *  from 21 to 99, get combination value of tens-units
+         *  from 1 to 19, get value from map straightly
+         *  from 20 to 99, get combination value of tens-units
+         *  from 100 to 999 get combination value of hundreds and tens-units(or straight value[1-20])
          */
 
+        StringBuilder sb = new StringBuilder();
+        int unit = 10000; /* max unit of number * 10 */
+        int rest = num;
+
+        while (unit >= 1) {
+            unit = unit / 10;
+            if( rest == 0 ) break;
+
+            int head = rest / unit;
+
+            if( head == 0 ) continue;
+
+            /* append spells */
+            if (rest >= 1 && rest <= 19) {
+                sb.append(spells.get(rest));
+                break;
+            } else if (rest <= 99) {
+                sb.append(spells.get(head * unit));
+            } else {
+                sb.append(spells.get(head));
+                sb.append(" ");
+                sb.append(spells.get(unit));
+            }
+
+            sb.append(" ");
+
+            rest = rest % unit;
+
+            /* hundreds 'and' */
+            if (unit == 100 && rest != 0) sb.append("and ");
+        }
+
+        return sb.toString();
     }
+
 
 
     /**
