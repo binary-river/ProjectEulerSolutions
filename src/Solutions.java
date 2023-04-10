@@ -1,5 +1,6 @@
 import java.io.*;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,8 @@ public class Solutions {
 //        solution14();
 //        solution15();
 //        solution16();
-        solution17();
+//        solution17();
+        solution18();
     }
 
 
@@ -527,8 +529,86 @@ public class Solutions {
 
     }
 
+    void solution18() {
+        /**
+         * Find maximum path sum
+         * path from top to bottom. can only move adjacent number downward.
+         * Maximum total of below example is 23 ( 3 + 7 + 4 + 9 )
+         *      3
+         *     7 4
+         *    2 4 6
+         *   8 5 9 3
+         *
+         * Find the maximum total of solution18_input.txt triangle
+         */
+
+        /**
+         * 3
+         * 7 4
+         * 2 4 6
+         * 8 5 9 3
+         *
+         * Calculating maximum total from bottom to top
+         *
+         * arr[3][0] = max( arr[4][0], arr[4][1] ) + arr[3][0]
+         * arr[3][1] = max( arr[4][1], arr[4][2] ) + arr[3][1]
+         * arr[3][2] = max( arr[4][2], arr[4][3] ) + arr[3][2]
+         * ...
+         * arr[0][0] = max( arr[1][0], arr[1][1] ) + arr[0][0]
+         *
+         *  --> arr[n][m] = max( arr[n+1][m], arr[n+1][m+1] ) + arr[n][m]
+         */
+
+        try {
+            getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // continue...
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     * @param file
+     * @return 2 dimension integer array consisted of numbers from input file. rows to rows, cols to cols.
+     * spaces in input file will be ignored
+     * example
+     *    input file        -->     array transformed ( arr[][] )
+     *        1                     1
+     *       2 3                    2 3
+     *      4 5 6                   4 5 6
+     *
+     * so, return array would be like below
+     * {{1}, {2,3}, {4,5,6}}
+     */
+    Integer[][] getIntegerArrByPyramid(File file) throws IOException{
+
+        List<String[]> tempResult = new ArrayList<>();
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        while (true) {
+            String s = br.readLine();
+            if( s == null ) break;
+
+            String[] sArr = s.split(" {1,}");
+            printStringArray(sArr);
+        }
+
+        return new Integer[10][10];
+    }
+
+    void printStringArray(String arr[]) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            sb.append(" ");
+        }
+        System.out.println("result : " + sb.toString());
+    }
 
     /**
      *
