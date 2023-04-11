@@ -560,7 +560,14 @@ public class Solutions {
          */
 
         try {
-            getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+            List<Integer[]> pyramidOriginal = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+            List<Integer[]> pyramidInput    = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+
+            printPyramid(pyramidOriginal);
+
+            int maxPathSumOfPyramid = getMaxPathSumOfPyramid(pyramidInput);
+
+            System.out.println("maxPathSumOfPyramid : " + maxPathSumOfPyramid);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -571,8 +578,41 @@ public class Solutions {
     /**********************************************************************************************************/
 
     /**
+     *
+     * @param pyramid : list of integer arrays
+     * @return integer value of max path sum of input pyramid
+     * caution : this method modifies input list
+     */
+    int getMaxPathSumOfPyramid(List<Integer[]> pyramid) {
+
+        int rows = pyramid.size();
+
+        /* starts from 2nd line from bottom to top
+           compare 2 ways each element can go below.
+           then put max value of ways(element + element below) to element itself
+         */
+
+        int row = rows - 2;
+        while (true) {
+            Integer[] elements = pyramid.get(row);
+            Integer[] elementsBelow = pyramid.get(row + 1);
+
+            for (int i = 0; i < elements.length; i++) {
+                elements[i] = Math.max(elements[i] + elementsBelow[i], elements[i] + elementsBelow[i + 1]);
+            }
+
+            row--;
+            if (row < 0) break;
+        }
+
+        System.out.println("result  -------------------------------");
+        printPyramid(pyramid);
+        return pyramid.get(0)[0];
+    }
+
+    /**
      * @param file
-     * @return 2 dimension integer array consisted of numbers from input file. rows to rows, cols to cols.
+     * @return list consisted of numbers from input file as integer arrays. rows to rows, cols to cols.
      * spaces in input file will be ignored
      * example
      *    input file        -->     array transformed ( arr[][] )
@@ -580,12 +620,12 @@ public class Solutions {
      *       2 3                    2 3
      *      4 5 6                   4 5 6
      *
-     * so, return array would be like below
+     * so, return list would be like below
      * {{1}, {2,3}, {4,5,6}}
      */
-    Integer[][] getIntegerArrByPyramid(File file) throws IOException{
+    List<Integer[]> getIntegerArrByPyramid(File file) throws IOException{
 
-        List<String[]> tempResult = new ArrayList<>();
+        List<Integer[]> result = new ArrayList<>();
 
         BufferedReader br = new BufferedReader(new FileReader(file));
 
@@ -593,21 +633,32 @@ public class Solutions {
             String s = br.readLine();
             if( s == null ) break;
 
-            String[] sArr = s.split(" {1,}");
-            printStringArray(sArr);
+            String[] sArr = s.trim().split(" {1,}");
+            Integer[] temp = new Integer[sArr.length];
+            for (int i = 0; i < sArr.length; i++) {
+                temp[i] = Integer.parseInt(sArr[i]);
+            }
+            result.add(temp);
         }
 
-        return new Integer[10][10];
+//        printPyramid(result);
+
+        return result;
     }
 
-    void printStringArray(String arr[]) {
+    void printPyramid(List<Integer[]> input) {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
-            sb.append(" ");
+        for (Integer[] integers : input) {
+            for (int i = 0; i < integers.length; i++) {
+                sb.append(integers[i]);
+                sb.append(" ");
+            }
+            sb.append("\n");
+
         }
-        System.out.println("result : " + sb.toString());
+
+        System.out.println(sb.toString());
     }
 
     /**
