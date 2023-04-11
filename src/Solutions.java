@@ -1,10 +1,7 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Solutions {
 
@@ -31,7 +28,8 @@ public class Solutions {
 //        solution15();
 //        solution16();
 //        solution17();
-        solution18();
+//        solution18();
+        solution19();
     }
 
 
@@ -557,8 +555,77 @@ public class Solutions {
 
     }
 
+    void solution19() {
+        /**
+         * 1 Jan 1900 was a Monday.
+         * Thirty days has September, April, June and November.
+         * All the rest have thirty-one,
+         * Saving February alone, which has twenty-eight, and on leap years, twenty-nine.
+         * A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
+         * How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+         */
+
+        try {
+            getSpecificWeekDayCount("20100301", "20300320", 5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param startDate : start date for counting specific weekday
+     * @param endDate   : end date for counting specific weekday
+     * @param weekday   : weekday for counting. ( 0:monday ... 6:sunday )
+     * @return count of specific weekday between startDate and endDate
+     * this method counts specific weekday based on only one information. "1.Jan.1900 was a monday"
+     */
+    int getSpecificWeekDayCount(String startDate, String endDate, int weekday) throws Exception{
+        // 30 days -> 4, 6, 9, 11
+        // 31 days -> 1, 3, 5, 7, 8, 10, 12
+        // 28 or 29 days -> 2
+        // All faults go to Emperor August!
+        // year -> 365, leap year -> 366
+        // first sunday from 1.Jan.1900 is 7.Jan.1900
+        // so this question could be converted to
+        // ' max x value of (7 times x) <= days between 7.Jan.1900 to 31.Dec.2000
+        //  - max y value of (7 times y) <= days between 7.Jan.1900 to 31.Dec.1900 '
+
+        // 1.Jan.1900 was a monday
+        int startYear  = Integer.parseInt(startDate.substring(0, 4));
+        int startMonth = Integer.parseInt(startDate.substring(4, 6));
+        int startDay   = Integer.parseInt(startDate.substring(6, 8));
+
+        int endYear  = Integer.parseInt(endDate.substring(0, 4));
+        int endMonth = Integer.parseInt(endDate.substring(4, 6));
+        int endDay   = Integer.parseInt(endDate.substring(6, 8));
+
+        Calendar cal0 = Calendar.getInstance();
+        cal0.set(1900, 0, 1);
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(startYear, startMonth - 1, startDay);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(endYear, endMonth - 1, endDay);
+
+        System.out.println(cal0.getTime());
+        System.out.println(cal1.getTime());
+        System.out.println(cal2.getTime());
+
+
+        // count days between 1.Jan.1900 and endDate  then minus weekday adder
+        // then count weekday
+
+        // count days between 1.Jan.1900 and startDate  then minus weekday adder
+        // then count weekday
+
+        // week day count 1 - week day count 2
+        return 1;
+    }
 
     /**
      *
