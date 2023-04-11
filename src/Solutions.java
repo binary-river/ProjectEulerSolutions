@@ -542,6 +542,31 @@ public class Solutions {
          * Find the maximum total of solution18_input.txt triangle
          */
 
+        try {
+            List<Integer[]> pyramidOriginal = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+            List<Integer[]> pyramidInput    = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
+
+            printPyramid(pyramidOriginal);
+
+            int maxPathSumOfPyramid = getMaxPathSumOfPyramid(pyramidInput);
+
+            System.out.println("maxPathSumOfPyramid : " + maxPathSumOfPyramid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**********************************************************************************************************/
+
+    /**
+     *
+     * @param pyramid : list of integer arrays
+     * @return integer value of max path sum of input pyramid
+     * caution : this method modifies input list
+     */
+    int getMaxPathSumOfPyramid(List<Integer[]> pyramid) {
         /**
          * 3
          * 7 4
@@ -559,38 +584,7 @@ public class Solutions {
          *  --> arr[n][m] = max( arr[n+1][m], arr[n+1][m+1] ) + arr[n][m]
          */
 
-        try {
-            List<Integer[]> pyramidOriginal = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
-            List<Integer[]> pyramidInput    = getIntegerArrByPyramid(new File("./src/input/solution18_input.txt"));
-
-            printPyramid(pyramidOriginal);
-
-            int maxPathSumOfPyramid = getMaxPathSumOfPyramid(pyramidInput);
-
-            System.out.println("maxPathSumOfPyramid : " + maxPathSumOfPyramid);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // continue...
-    }
-
-
-    /**********************************************************************************************************/
-
-    /**
-     *
-     * @param pyramid : list of integer arrays
-     * @return integer value of max path sum of input pyramid
-     * caution : this method modifies input list
-     */
-    int getMaxPathSumOfPyramid(List<Integer[]> pyramid) {
-
         int rows = pyramid.size();
-
-        /* starts from 2nd line from bottom to top
-           compare 2 ways each element can go below.
-           then put max value of ways(element + element below) to element itself
-         */
 
         int row = rows - 2;
         while (true) {
