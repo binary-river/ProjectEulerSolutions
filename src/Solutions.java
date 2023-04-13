@@ -1,6 +1,8 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Solutions {
@@ -566,7 +568,7 @@ public class Solutions {
          */
 
         try {
-            getSpecificWeekDayCount("20100301", "20300320", 5);
+            getCountOfWeekDayPeriod("19000114", 6);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -574,6 +576,46 @@ public class Solutions {
 
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param startDate start date for counting specific weekday
+     * @param endDate end date for counting specific weekday
+     * @param weekday weekday for counting. ( 0:monday ... 6:sunday )
+     * @return count of specific weekday from start date to end date ( containing end date, except start date )
+     */
+    int getCountOfWeekDayPeriod(String startDate, String endDate, int weekday) throws Exception{
+
+        int count1 = getCountOfWeekDay(startDate, weekday);
+        int count2 = getCountOfWeekDay(endDate, weekday);
+
+        return count2 - count1;
+    }
+
+    /**
+     *
+     * @param date end date for counting specific weekday
+     * @param weekday weekday for counting. ( 0:monday ... 6:sunday )
+     * @return count of specific weekday from 1.Jan.1900 to input date ( containing input date itself )
+     */
+    int getCountOfWeekDay(String date, int weekday) throws Exception{
+
+        if( date.length() != 8 ) throw new Exception("invalid date");
+        if( weekday < 0 || weekday > 6 ) throw new Exception("invalid weekday");
+
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(4, 6));
+        int day = Integer.parseInt(date.substring(6, 8));
+
+        LocalDate date1 = LocalDate.of(1900, 1, 1);
+        LocalDate date2 = LocalDate.of(year, month, day);
+
+        long days = ChronoUnit.DAYS.between(date1, date2);
+        days += weekday;
+        System.out.println("count of weekday : " + days/7);
+
+        return 0;
+    }
 
     /**
      *
