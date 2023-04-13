@@ -1,7 +1,9 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -32,6 +34,7 @@ public class Solutions {
 //        solution17();
 //        solution18();
         solution19();
+        solution19_withJavaDate();
     }
 
 
@@ -567,11 +570,45 @@ public class Solutions {
          * How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
          */
 
-        try {
-            getCountOfWeekDayPeriod("19000114", 6);
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 1900.1.1 is sunday.
+        // count sundays of the first of the month
+        // 1900.1.1 is monday --> set base ( 0 value )
+        // so.. 1900.1.6 is 6 and is sunday.
+        // then, base+1 % 7 == 0 means sunday.
+
+        int[] dayOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        int days = 0; // days from base(1900.1.1)
+        int result = 0;
+
+        /* count sundays from 1901 to 2000 */
+        for (int i = 1900; i <= 2000; i++) {
+            int leap = 0;
+            //leap year
+            if (i % 400 == 0 || (i % 4 == 0 && i % 100 != 0)) leap = 1;
+
+            for (int j = 0; j < 12; j++) {
+                if ((days + 1) % 7 == 0 && i != 1900 ) result++;
+
+                days += dayOfMonth[j];
+                if( j == 1 ) days += leap;
+            }
         }
+
+        System.out.println("result : " + result);
+    }
+
+    void solution19_withJavaDate() {
+        LocalDate date = LocalDate.of(1901, 1, 1);
+
+        int count = 0;
+        while (true) {
+            if(date.getYear() > 2000) break;
+            if( date.getDayOfMonth() == 1 && date.getDayOfWeek() == DayOfWeek.SUNDAY ) count++;
+            date = date.plusDays(1);
+        }
+
+        System.out.println("count : " + count);
     }
 
 
@@ -615,58 +652,6 @@ public class Solutions {
         System.out.println("count of weekday : " + days/7);
 
         return 0;
-    }
-
-    /**
-     *
-     * @param startDate : start date for counting specific weekday
-     * @param endDate   : end date for counting specific weekday
-     * @param weekday   : weekday for counting. ( 0:monday ... 6:sunday )
-     * @return count of specific weekday between startDate and endDate
-     * this method counts specific weekday based on only one information. "1.Jan.1900 was a monday"
-     */
-    int getSpecificWeekDayCount(String startDate, String endDate, int weekday) throws Exception{
-        // 30 days -> 4, 6, 9, 11
-        // 31 days -> 1, 3, 5, 7, 8, 10, 12
-        // 28 or 29 days -> 2
-        // All faults go to Emperor August!
-        // year -> 365, leap year -> 366
-        // first sunday from 1.Jan.1900 is 7.Jan.1900
-        // so this question could be converted to
-        // ' max x value of (7 times x) <= days between 7.Jan.1900 to 31.Dec.2000
-        //  - max y value of (7 times y) <= days between 7.Jan.1900 to 31.Dec.1900 '
-
-        // 1.Jan.1900 was a monday
-        int startYear  = Integer.parseInt(startDate.substring(0, 4));
-        int startMonth = Integer.parseInt(startDate.substring(4, 6));
-        int startDay   = Integer.parseInt(startDate.substring(6, 8));
-
-        int endYear  = Integer.parseInt(endDate.substring(0, 4));
-        int endMonth = Integer.parseInt(endDate.substring(4, 6));
-        int endDay   = Integer.parseInt(endDate.substring(6, 8));
-
-        Calendar cal0 = Calendar.getInstance();
-        cal0.set(1900, 0, 1);
-
-        Calendar cal1 = Calendar.getInstance();
-        cal1.set(startYear, startMonth - 1, startDay);
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.set(endYear, endMonth - 1, endDay);
-
-        System.out.println(cal0.getTime());
-        System.out.println(cal1.getTime());
-        System.out.println(cal2.getTime());
-
-
-        // count days between 1.Jan.1900 and endDate  then minus weekday adder
-        // then count weekday
-
-        // count days between 1.Jan.1900 and startDate  then minus weekday adder
-        // then count weekday
-
-        // week day count 1 - week day count 2
-        return 1;
     }
 
     /**
