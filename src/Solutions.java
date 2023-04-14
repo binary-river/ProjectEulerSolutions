@@ -35,7 +35,8 @@ public class Solutions {
 //        solution18();
 //        solution19();
 //        solution19_withJavaDate();
-        solution20();
+//        solution20();
+        solution21();
     }
 
 
@@ -633,10 +634,62 @@ public class Solutions {
         }
 
         System.out.println("result : " + result);
-
     }
 
+    void solution21() {
+        /**
+         * Find sum of all amicable numbers under 10000.
+         * Amicable number :
+         *  d(x) : sum of divisors of x
+         *  if d(n) = m, d(m) = n, then m and n are amicable numbers.
+         */
+
+        int limit = 10000;
+        List<Integer> resultList = new ArrayList<>();
+
+
+        for (int i = 1; i <10000; i++) {
+            // search if i is already added to list as pair
+            if( resultList.indexOf(i) != -1 ) continue;
+
+            // continue loop if i is not a amicable number
+            int temp = getSumOfDivisors(i);
+            if( i == temp || i != getSumOfDivisors(temp)) continue;
+
+            //amicable pair, add pair to list
+            resultList.add(i);
+            resultList.add(temp);
+        }
+
+        long result = 0L;
+        for (Integer integer : resultList) {
+            result += integer;
+        }
+
+        System.out.println("result : " + result );
+    }
+
+
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param number
+     * @return sum of divisors of input number ( divisors less than n )
+     */
+    int getSumOfDivisors(int number) {
+        int result = 0;
+
+        for (int i = 1; i*i <= number; i++) {
+
+            if( number % i != 0 || i == number ) continue;
+
+            result += i;
+            if( number / i < number && number / i != i ) result += number/i;
+        }
+
+        return result;
+    }
 
     /**
      *
