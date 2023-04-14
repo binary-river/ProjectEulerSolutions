@@ -33,8 +33,9 @@ public class Solutions {
 //        solution16();
 //        solution17();
 //        solution18();
-        solution19();
-        solution19_withJavaDate();
+//        solution19();
+//        solution19_withJavaDate();
+        solution20();
     }
 
 
@@ -611,6 +612,29 @@ public class Solutions {
         System.out.println("count : " + count);
     }
 
+    void solution20() {
+        /**
+         * Find the sum of the digits in the number 100!
+         * (ex. the sum of the digits of 4! -> 4*3*2*1 -> 24 -> 2+4 -> 6
+         */
+
+        BigDecimal bd = new BigDecimal(1);
+        BigDecimal temp = null;
+        long result = 0L;
+
+        for (int i = 100; i >= 1; i--) {
+            temp = new BigDecimal(i);
+            bd = bd.multiply(temp);
+        }
+
+        String bdString = bd.toString();
+        for (int i = 0; i < bdString.length(); i++) {
+            result += bdString.charAt(i) - '0';
+        }
+
+        System.out.println("result : " + result);
+
+    }
 
     /**********************************************************************************************************/
 
