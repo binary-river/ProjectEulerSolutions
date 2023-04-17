@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Solutions {
 
@@ -37,7 +39,8 @@ public class Solutions {
 //        solution19_withJavaDate();
 //        solution20();
 //        solution21();
-        solution22();
+//        solution22();
+        solution23();
     }
 
 
@@ -713,8 +716,55 @@ public class Solutions {
 
     }
 
+    void solution23() {
+        /**
+         * Find the sum of all the positive integers cannot be written as the sum of two abundant numbers.
+         * ( All integers greater than 28123 can be written as the sum of two abundant numbers )
+         */
+
+
+        Set<Integer> abundantNumbers = new HashSet<>();
+        int limit = 28123;
+
+        //make a list of abundant numbers
+        for (int i = 1; i <= limit; i++) {
+            int sumOfDivisors = getSumOfDivisors(i);
+            if (sumOfDivisors > i) abundantNumbers.add(i);
+        }
+
+
+        long result = 1L;
+        for (int i = 2; i <= limit; i++) {
+            if (!validNumberTwoSumOfSet(i, abundantNumbers)) result += i;
+        }
+
+
+        System.out.println("result : " + result );
+
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param number    : target number to valid whether it is consisted of two number of input set
+     * @param numberSet : set of nominee numbers that can be a part of target number
+     * @return true if target number is consisted of two numbers in numberSet ( same number in set can be used twice. ex. 24 = 12+12 )
+     *
+     */
+    boolean validNumberTwoSumOfSet(int number, Set<Integer> numberSet) {
+
+        // inspect from 1 to half of number
+        for (int i = 1; i <= (number+1)/2 ; i++) {
+            if(!numberSet.contains(i)) continue;
+
+            int rest = number - i;
+            if (numberSet.contains(rest)) return true;
+        }
+
+        return false;
+    }
 
     /**
      *
