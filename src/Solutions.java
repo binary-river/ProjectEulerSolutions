@@ -36,7 +36,8 @@ public class Solutions {
 //        solution19();
 //        solution19_withJavaDate();
 //        solution20();
-        solution21();
+//        solution21();
+        solution22();
     }
 
 
@@ -669,8 +670,73 @@ public class Solutions {
         System.out.println("result : " + result );
     }
 
+    void solution22() {
+        /**
+         *
+         * Rank of name is determined by sort names alphabetically in input file.
+         * Name value is determined by sum of alphabets' values( a:1, b:2 ... case insensitive ) in each name.
+         * Name score is determined by (rank of name * name value)
+         * What is the total of all the name scores in the input file
+         */
+
+        String fileName = "src/input/solution22_input.txt";
+        List<String> contentList = new ArrayList<>();
+
+        //Add names in file to list
+        try {
+            String content = getFileByOneline(new File(fileName));
+
+            //replace double quotations to empty character
+            content = content.replaceAll("\"", "");
+
+            //split by comma, add to list
+            String[] contentArray = content.split(",");
+            contentList = Arrays.asList(contentArray);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //sort list by character order
+        contentList.sort(String.CASE_INSENSITIVE_ORDER);
+
+
+        //calculate total score of names in list
+        int seq = 0;
+        long result = 0L;
+        for (String s : contentList) {
+            seq++;
+            result += getValueOfAlphabet(s) * seq;
+        }
+
+        System.out.println("result : " + result);
+
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param s  input string
+     * @return  get sum of integer values of characters in string by alphabetically. (A -> 1, B -> 2 ...  case insensitive.)
+     * Only alphabets will be counted
+     * ( ex. "A$B!C" --> 1+2+3 --> return 6.   $ and ! will be ignored )
+     */
+    int getValueOfAlphabet(String s) {
+        int result = 0;
+
+        String s1 = s.toUpperCase();
+
+        for (int i = 0; i < s1.length(); i++) {
+            char c = s1.charAt(i);
+
+            if (c < 0x41 || c > 0x5A) continue;
+            result += s1.charAt(i) - 0x40;
+        }
+
+        return result;
+    }
 
     /**
      *
