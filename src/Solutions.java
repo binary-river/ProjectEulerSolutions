@@ -40,7 +40,8 @@ public class Solutions {
 //        solution20();
 //        solution21();
 //        solution22();
-        solution23();
+//        solution23();
+        solution24();
     }
 
 
@@ -743,8 +744,53 @@ public class Solutions {
 
     }
 
+    void solution24() {
+        /**
+         * If there's list of permutation ordred by numerically or alphabetically, that's called lexicographic order.
+         * 0,1,2 numbers' lexicographic permutations are 012, 021, 102, 120, 201, 210
+         * What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
+         */
+
+        int targetOrder = 1000000; /* millionth lexicographic */
+        int num = 9;               /* max digit in digits given ( given digits must be consecutive numbers ) */
+
+        /* target Order must be under permutation cardinality */
+        if (getFactorial(num + 1) < targetOrder) {
+            System.out.println("invalid input");
+            return;
+        }
+
+        int mid = 0;               /* middle value to reduce cardinality */
+        long midFactorial = 0L;
+        for (int i = num; i >=1; i--) {
+            midFactorial = getFactorial(i);
+            if ( midFactorial < targetOrder) {
+                mid = i;
+                break;
+            }
+        }
+
+        int startIndex = num+1 - mid -1;
+        int startNum = (int)(targetOrder / midFactorial);
+
+        System.out.println("startIndex : " + startIndex);
+        System.out.println("startNum   : " + startNum);
+
+        //continue..
+
+    }
 
     /**********************************************************************************************************/
+
+    long getFactorial(int n) {
+        long result = 0L;
+
+        for (int i = 1; i <= n; i++) {
+            result = (result == 0 ? 1 : result) * i;
+        }
+
+        return result;
+    }
 
     /**
      *
