@@ -752,37 +752,52 @@ public class Solutions {
          */
 
         int targetOrder = 1000000; /* millionth lexicographic */
-        int num = 9;               /* max digit in digits given ( given digits must be consecutive numbers ) */
+        String[] elements = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-        /* target Order must be under permutation cardinality */
-        if (getFactorial(num + 1) < targetOrder) {
-            System.out.println("invalid input");
-            return;
-        }
+        List<String> fullFactorial = getFullFactorial(Arrays.asList(elements));
 
-        int mid = 0;               /* middle value to reduce cardinality */
-        long midFactorial = 0L;
-        for (int i = num; i >=1; i--) {
-            midFactorial = getFactorial(i);
-            if ( midFactorial < targetOrder) {
-                mid = i;
-                break;
-            }
-        }
-
-        int startIndex = num+1 - mid -1;
-        int startNum = (int)(targetOrder / midFactorial);
-
-        System.out.println("startIndex : " + startIndex);
-        System.out.println("startNum   : " + startNum);
-
-        //continue..
+        System.out.println(fullFactorial.get(targetOrder-1));
 
     }
 
     /**********************************************************************************************************/
 
-    long getFactorial(int n) {
+    /**
+     *
+     * @param elements : List of elements for factorial
+     * @return ascending ordered factorial list made by all input elements.
+     */
+    List<String> getFullFactorial(List<String> elements) {
+        List<String> resultList = new ArrayList<>();
+
+        //sort input elements
+        Collections.sort(elements);
+
+        //return last element in recursive
+        if( elements.size() == 1 ) return elements;
+
+        for (String element : elements) {
+
+            //copy input elements, remove current element and toss to recursive method
+            List<String> anotherElements = new ArrayList<>();
+            anotherElements.addAll(elements);
+            anotherElements.remove(element);
+
+            List<String> recursiveResult = getFullFactorial(anotherElements);
+
+            for (String s : recursiveResult) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(element);
+                sb.append(s);
+                resultList.add(sb.toString());
+            }
+        }
+
+        return resultList;
+    }
+
+
+    long getFactorialCount(int n) {
         long result = 0L;
 
         for (int i = 1; i <= n; i++) {
