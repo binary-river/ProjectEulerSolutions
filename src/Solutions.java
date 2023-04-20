@@ -41,7 +41,8 @@ public class Solutions {
 //        solution21();
 //        solution22();
 //        solution23();
-        solution24();
+//        solution24();
+        solution25();
     }
 
 
@@ -757,7 +758,30 @@ public class Solutions {
         List<String> fullFactorial = getFullFactorial(Arrays.asList(elements));
 
         System.out.println(fullFactorial.get(targetOrder-1));
+    }
 
+    void solution25() {
+        /**
+         *  Find first 1000-digit number of fibonacci sequence's index
+         */
+
+        BigDecimal prev = new BigDecimal(1);
+        BigDecimal curr = new BigDecimal(1);
+        BigDecimal temp = null;
+
+        int index = 2;
+
+        while (true) {
+            if( curr.precision() >= 1000 ) break;
+            temp = curr;
+            curr = curr.add(prev);
+            prev = temp;
+
+            index++;
+        }
+
+        System.out.println("index : " + index);
+        System.out.println("sequence : " + curr.toString());
     }
 
     /**********************************************************************************************************/
