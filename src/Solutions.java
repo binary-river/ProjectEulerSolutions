@@ -42,7 +42,8 @@ public class Solutions {
 //        solution22();
 //        solution23();
 //        solution24();
-        solution25();
+//        solution25();
+        solution26();
     }
 
 
@@ -782,6 +783,11 @@ public class Solutions {
 
         System.out.println("index : " + index);
         System.out.println("sequence : " + curr.toString());
+    }
+
+    void solution26() {
+        double a = 2.123;
+        
     }
 
     /**********************************************************************************************************/
