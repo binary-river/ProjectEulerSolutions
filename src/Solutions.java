@@ -786,8 +786,33 @@ public class Solutions {
     }
 
     void solution26() {
-        double a = 2.123;
+        /**
+         * Find a unit fraction which has longest digit recurring cycle ( 1 < denominator < 1000 )
+         * digit recurring cycle : 0.123123123... --> 123 is a recurring cycle in this fraction.
+         */
+
+        /* first, need to know whether unit fraction given is infinite or not */
+        System.out.println(getUnitFractionsInfiniteOrNot(5));
+
+        /* calculate recurring cycle */
         
+    }
+
+    /**
+     *
+     * @param d  denominator of unit fraction
+     * @return true if 1/d is infinite, false if it is not.
+     */
+    Boolean getUnitFractionsInfiniteOrNot(int d) {
+        Map<Long, Long> resultOfPrimeFactorization = getResultOfPrimeFactorization(d);
+
+        for (Long aLong : resultOfPrimeFactorization.keySet()) {
+            if (aLong != 2L && aLong != 5L) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**********************************************************************************************************/
