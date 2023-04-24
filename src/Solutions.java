@@ -795,7 +795,68 @@ public class Solutions {
         System.out.println(getUnitFractionsInfiniteOrNot(5));
 
         /* calculate recurring cycle */
-        
+        List<Integer> recurringCycleOfUnitFraction = getRecurringCycleOfUnitFraction(7);
+        StringBuilder sb = new StringBuilder();
+        for (Integer integer : recurringCycleOfUnitFraction) {
+            sb.append(integer);
+        }
+        System.out.println("result : " + sb.toString());
+
+    }
+
+
+    /**********************************************************************************************************/
+
+
+    /**
+     *
+     * @param d denominator of unit fraction
+     * @return list of integers that contains recurring cycle numbers ( ex. 0.012340123401234 -> {0,1,2,3,4} )
+     */
+    List<Integer> getRecurringCycleOfUnitFraction(int d) {
+        int numerator = 1;
+        int multiplier = 10;
+        int denominator = d;
+        int recurringPoint = 0; //recurring cycle's first number index in remainderList.
+
+        // list to save remainders, validate recurring cycle by this list.
+        List<Integer> remainderList = new ArrayList<>();
+
+        // quotient value right to decimal points
+        List<Integer> quotientList = new ArrayList<>();
+
+
+        numerator = numerator * multiplier;
+        while (true) {
+
+            int quotient = numerator / denominator;
+            int remainder = numerator % denominator;
+
+            // check if remainder is not a new one, else add remainder integer as -1
+            int tempIndex = remainderList.indexOf(remainder);
+
+            if (quotient == 0) {
+                remainderList.add(-1);
+            } else if (tempIndex != -1) {
+                recurringPoint = tempIndex;
+                break;
+            } else {
+                remainderList.add(remainder);
+            }
+
+            // add quotient integer
+            quotientList.add(quotient);
+
+            numerator = remainder * multiplier;
+        }
+
+        // copy quotient recurring cycle to result list
+        List<Integer> resultList = new ArrayList<>();
+        for (int i = recurringPoint; i < quotientList.size(); i++) {
+            resultList.add(quotientList.get(i));
+        }
+
+        return resultList;
     }
 
     /**
@@ -814,8 +875,6 @@ public class Solutions {
 
         return false;
     }
-
-    /**********************************************************************************************************/
 
     /**
      *
