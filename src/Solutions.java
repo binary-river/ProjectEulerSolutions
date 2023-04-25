@@ -790,18 +790,32 @@ public class Solutions {
          * Find a unit fraction which has longest digit recurring cycle ( 1 < denominator < 1000 )
          * digit recurring cycle : 0.123123123... --> 123 is a recurring cycle in this fraction.
          */
+        int maxSize = 0;
+        int maxD    = 0;
+        String maxRecurringCycle = "";
 
-        /* first, need to know whether unit fraction given is infinite or not */
-        System.out.println(getUnitFractionsInfiniteOrNot(5));
+        for (int i = 1; i <= 1000; i++) {
 
-        /* calculate recurring cycle */
-        List<Integer> recurringCycleOfUnitFraction = getRecurringCycleOfUnitFraction(7);
-        StringBuilder sb = new StringBuilder();
-        for (Integer integer : recurringCycleOfUnitFraction) {
-            sb.append(integer);
+            /* first, need to know whether unit fraction given is infinite or not */
+            if(!getUnitFractionsInfiniteOrNot(i)) continue;
+
+            /* calculate recurring cycle */
+            List<Integer> recurringCycleOfUnitFraction = getRecurringCycleOfUnitFraction(i);
+            if (maxSize > recurringCycleOfUnitFraction.size()) continue;
+
+            StringBuilder sb = new StringBuilder();
+
+            maxSize = recurringCycleOfUnitFraction.size();
+            for (Integer integer : recurringCycleOfUnitFraction) {
+                sb.append(integer);
+            }
+            maxRecurringCycle = sb.toString();
+            maxD = i;
         }
-        System.out.println("result : " + sb.toString());
 
+        System.out.println("denominator which has a max size of recurring cycle : " + maxD);
+        System.out.println("max size of recurring cycle : " + maxSize);
+        System.out.println("max recurring cycle : " + maxRecurringCycle);
     }
 
 
@@ -815,17 +829,18 @@ public class Solutions {
      */
     List<Integer> getRecurringCycleOfUnitFraction(int d) {
         int numerator = 1;
-        int multiplier = 10;
         int denominator = d;
-        int recurringPoint = 0; //recurring cycle's first number index in remainderList.
+        int multiplier = 10;    // multiply 10 in each loop
+        int recurringPoint = 0; // recurring cycle's index of first number in remainderList.
 
-        // list to save remainders, validate recurring cycle by this list.
+        // list to save remainders, check recurring cycle by this list.
         List<Integer> remainderList = new ArrayList<>();
 
         // quotient value right to decimal points
         List<Integer> quotientList = new ArrayList<>();
 
 
+        /* find recurring cycle starting point */
         numerator = numerator * multiplier;
         while (true) {
 
@@ -850,7 +865,7 @@ public class Solutions {
             numerator = remainder * multiplier;
         }
 
-        // copy quotient recurring cycle to result list
+        // copy recurring cycle in list of quotient to result list
         List<Integer> resultList = new ArrayList<>();
         for (int i = recurringPoint; i < quotientList.size(); i++) {
             resultList.add(quotientList.get(i));
