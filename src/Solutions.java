@@ -43,7 +43,8 @@ public class Solutions {
 //        solution23();
 //        solution24();
 //        solution25();
-        solution26();
+//        solution26();
+        solution27();
     }
 
 
@@ -816,6 +817,45 @@ public class Solutions {
         System.out.println("denominator which has a max size of recurring cycle : " + maxD);
         System.out.println("max size of recurring cycle : " + maxSize);
         System.out.println("max recurring cycle : " + maxRecurringCycle);
+    }
+
+
+    void solution27() {
+        /**
+         *  with formula "n^2 + an + b" where |a| < 1000, |b| <= 1000,
+         *  Find the product of coefficients(a and b) which produces maximum number of primes for consecutive values of n
+         */
+
+        // presumed cardinality : 1998 * 2000 * 500 : 1,998,000,000
+        int resultA = 0;
+        int resultB = 0;
+        int maximumNumberOfPrimes = 0;
+
+        for (int a = -1000+1; a <1000; a++) {
+            for (int b = -1000; b <= 1000 ; b++) {
+
+                // get count of primes of formula "n*n + a*n + b*n"
+                int n = 0;
+                int tempNumberOfPrimes = 0;
+                while (true) {
+                    if( !validPrimeNumber(n*n + a*n + b) ) break;
+                    n++;
+                    tempNumberOfPrimes++;
+                }
+
+                //compare count of primes with previous maximum count of primes
+                if (tempNumberOfPrimes > maximumNumberOfPrimes) {
+                    maximumNumberOfPrimes = tempNumberOfPrimes;
+                    resultA = a;
+                    resultB = b;
+                }
+            }
+        }
+
+        System.out.println("resultA : " + resultA);
+        System.out.println("resultB : " + resultB);
+        System.out.println("maximum number of primes : " + maximumNumberOfPrimes);
+        System.out.println("coeefficient of a and b " + (resultA * resultB));
     }
 
 
@@ -1601,6 +1641,8 @@ public class Solutions {
      *         false if number is not a prime number
      */
     boolean validPrimeNumber(long number) {
+
+        if( number < 0 ) number = number * -1;
 
         for (long i = 2L; i*i <= number; i++) {
             if( number % i == 0 ) return false;
