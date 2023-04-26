@@ -42,9 +42,10 @@ public class Solutions {
 //        solution22();
 //        solution23();
 //        solution24();
+        solution26_improved();
 //        solution25();
 //        solution26();
-        solution27();
+//        solution27();
     }
 
 
@@ -820,6 +821,28 @@ public class Solutions {
     }
 
 
+    void solution26_improved() {
+        /**
+         * lexicongraphic order, 0~9, find millionth order
+         */
+        List<Long> nums = new ArrayList<>(List.of(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L));
+
+        StringBuilder sb = new StringBuilder();
+        long target = 1000000L-1L;
+
+        // faster by ignoring unwanted factorial using target / factorial and target % factorial.
+        // quotient of target / factorial means, we can ignore target * factorial count because those are unwanted factorial.
+        while (!nums.isEmpty()) {
+            long fact = nums.size() == 1 ? 1 : getFactorialCount(nums.size() - 1);
+            int index = (int) (target / fact);
+            target = target % fact;
+            sb.append(nums.remove(index) + "");
+        }
+
+        System.out.println("result : " + sb.toString());
+    }
+
+
     void solution27() {
         /**
          *  with formula "n^2 + an + b" where |a| < 1000, |b| <= 1000,
@@ -831,6 +854,7 @@ public class Solutions {
         int resultB = 0;
         int maximumNumberOfPrimes = 0;
 
+        // |a| < 1000, |b| <= 1000, iterate.
         for (int a = -1000+1; a <1000; a++) {
             for (int b = -1000; b <= 1000 ; b++) {
 
@@ -1652,3 +1676,5 @@ public class Solutions {
     }
 
 }
+
+
