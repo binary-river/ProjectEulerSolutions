@@ -42,10 +42,11 @@ public class Solutions {
 //        solution22();
 //        solution23();
 //        solution24();
-        solution26_improved();
+//        solution26_improved();
 //        solution25();
 //        solution26();
 //        solution27();
+        solution28();
     }
 
 
@@ -880,6 +881,50 @@ public class Solutions {
         System.out.println("resultB : " + resultB);
         System.out.println("maximum number of primes : " + maximumNumberOfPrimes);
         System.out.println("coeefficient of a and b " + (resultA * resultB));
+    }
+
+    void solution28() {
+        /**
+         * Number spiral diagonals
+         * From 1, moves to right in a clockwise direction, 5 by 5 spiral forms below
+         * 21 22 23 24 25
+         * 20  7  8  9 10
+         * 19  6  1  2 11
+         * 18  5  4  3 12
+         * 17 16 15 14 13
+         *
+         * Sum of diagonal numbers is 101.
+         * Find sum of diagonal numbers of 1001 by 1001 spiral.
+         */
+
+        // 1           --> start point.
+        // 3  5  7  9  --> +2    ( 3x3 rectangle )
+        // 13 17 21 25 --> +4    ( 5x5 rectangle )
+        // ...
+        // numbers...  --> +1000 ( 1001x1001 rectangle )
+
+        long num = 1L;    // number increasing by moving
+        long adder = 2L;  // adder increasing by rectangle size
+        long maxSpiralSize = 1001L; // spiral size
+        long result = 0L; //sum of diagonal numbers
+
+
+        result += num;
+        while (true) {
+            // calculate diagonal numbers and add it to result.
+            for (int i = 0; i < 4; i++) {
+                num += adder;
+                result += num;
+            }
+
+            adder = adder+2;
+
+            // adder must be under spiral size.
+            if( adder >= maxSpiralSize ) break;
+        }
+
+        System.out.println("result : " + result);
+
     }
 
 
