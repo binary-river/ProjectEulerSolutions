@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 public class Solutions {
 
+
     void run() {
         /* solution 1 ~ 30(or over) had done before.
            1 ~ 30 is just for script.
@@ -46,7 +47,9 @@ public class Solutions {
 //        solution25();
 //        solution26();
 //        solution27();
-        solution28();
+//        solution28();
+//        solution29();
+        solution30();
     }
 
 
@@ -927,6 +930,108 @@ public class Solutions {
 
     }
 
+    void solution29() {
+        /**
+         * integer combinations of a^b ( 2 <= a <= 5, 2 <= b <= 5 )
+         * are below.
+         * -----------------------------------
+         * 2^2=4,  2^3=8,   2^4=16,  2^5=32
+         * 3^2=9,  3^3=27,  3^4=81,  3^5=243
+         * 4^2=16, 4^3=64,  4^4=256, 4^5=1024
+         * 5^2=25, 5^3=125, 5^4=625, 5^5=3125
+         * -----------------------------------
+         * place in numerical order, with any repeats removed.
+         * 4, 8, 9, 16, 25, 27, 32, 64, 81, 125, 243, 256, 625, 1024, 3125
+         *
+         * Find count of distinct terms in combinations of a^b (2 <= a <= 100 and 2 <= b <= 100)
+         *
+         */
+
+        List<Map<Long, Long>> resultList = new ArrayList<>();
+
+
+        for (int a = 2; a <= 100; a++) {
+
+            //for a, get Factorization.
+            Map<Long, Long> factorizedA = getResultOfPrimeFactorization(a);
+
+            for (int b = 2; b <= 100; b++) {
+                // copy of factorized a
+                Map<Long, Long> resultOfPrimeFactorization = new HashMap<>(factorizedA);
+
+                // multiply b and primes' power in factorization
+                for (Long aLong : resultOfPrimeFactorization.keySet()) {
+                    resultOfPrimeFactorization.put(aLong, resultOfPrimeFactorization.get(aLong) * b);
+                }
+
+                //add list if not duplicated
+                boolean isEqual = false;
+
+                for (Map<Long, Long> longLongMap : resultList) {
+                    if (longLongMap.equals(resultOfPrimeFactorization)) {
+                        isEqual = true;
+                        break;
+                    }
+                }
+
+                if (!isEqual) {
+                    resultList.add(resultOfPrimeFactorization);
+                }
+            }
+        }
+
+        System.out.println("size of result : " + resultList.size());
+    }
+
+
+    void solution30() {
+        /**
+         * Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+         */
+
+        List<Integer> resultList = new ArrayList<>();
+        int result = 0;
+
+        //Find maximum number that can be represented by 9^5 * digits
+        int digits = 1;
+        int pow = 5;
+        int maximumNumber = 0;
+
+        while (true) {
+            int naturalLimitOfDigits = powInt(10,digits) - 1;
+            int poweredOfDigits = powInt(9, pow) * digits;
+
+            if (poweredOfDigits < naturalLimitOfDigits) {
+                maximumNumber = poweredOfDigits;
+                break;
+            }
+
+            digits++;
+        }
+
+        //iterate to maximum number
+        for (int i = 2; i <= maximumNumber; i++) {
+            //check if number can be represented by sum of digit^5s
+            int sum = 0;
+            int remainder = i;
+            while (remainder != 0) {
+                sum += powInt(remainder%10, pow);
+                remainder = remainder / 10;
+            }
+
+            if (sum == i) {
+                resultList.add(i);
+            }
+        }
+
+        for (Integer integer : resultList) {
+//            System.out.println("list : " + integer);
+            result += integer;
+        }
+
+        System.out.println("result : " + result);
+    }
+
 
     /**********************************************************************************************************/
 
@@ -1644,8 +1749,28 @@ public class Solutions {
      * @return result of a^b
      */
     long powLong(long a, long b) {
+        if( a == 0L ) return 0L;
+
         long result = 1L;
         for (long i = 0L; i < b; i++) {
+            result = result * a;
+        }
+
+        return result;
+    }
+
+
+    /**
+     *
+     * @param a
+     * @param b
+     * @return result of a^b
+     */
+    int powInt(int a, int b) {
+        if( a == 0 ) return 0;
+
+        int result = 1;
+        for (int i = 0; i < b; i++) {
             result = result * a;
         }
 
