@@ -49,7 +49,8 @@ public class Solutions {
 //        solution27();
 //        solution28();
 //        solution29();
-        solution30();
+//        solution30();
+        solution31();
     }
 
 
@@ -1025,15 +1026,55 @@ public class Solutions {
         }
 
         for (Integer integer : resultList) {
-//            System.out.println("list : " + integer);
             result += integer;
         }
 
         System.out.println("result : " + result);
     }
 
+    void solution31() {
+        /**
+         * Using britain's coins 1p, 2p, 5p, 10p, 20p, 50p, £1(100p), and £2(200p),
+         * Find ways to make £2(200p) using any number of coins.
+         */
+
+        List<Integer> coins = new ArrayList<>(List.of(1, 2, 5, 10, 20, 50, 100, 200));
+        System.out.println("result : " + getCountOfCoinCombination(coins, 200));
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     *
+     * @param coins  list of coins can be used
+     * @param targetAmount  target amount by using coins
+     * @return count of coin combinations that can make target amount
+     */
+    int getCountOfCoinCombination(List<Integer> coins, int targetAmount) {
+        ///// continue making...
+
+
+        if( targetAmount == 0 ) return 0;
+
+        int count = 0;
+        Collections.sort(coins, Collections.reverseOrder());
+
+        int i = 0;
+        while (true) {
+            int coinValue = coins.get(0) * i++;
+            if( coinValue > targetAmount ) break;
+            if( coins.size() == 1 && coinValue != targetAmount ) continue;
+
+            List<Integer> coins2 = new ArrayList<>(coins);
+            coins2.remove(0);
+            count += getCountOfCoinCombination(coins2, targetAmount - coinValue);
+        }
+
+        System.out.println("coin size : " + coins.size() + ", count : " + count);
+
+        return count;
+    }
 
 
     /**
