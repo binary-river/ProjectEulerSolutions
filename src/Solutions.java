@@ -1039,7 +1039,9 @@ public class Solutions {
          */
 
         List<Integer> coins = new ArrayList<>(List.of(1, 2, 5, 10, 20, 50, 100, 200));
-        System.out.println("result : " + getCountOfCoinCombination(coins, 200));
+        Collections.sort(coins, Collections.reverseOrder());
+
+        System.out.println("result : " + getCountOfCoinCombination(coins, 0,200));
     }
 
 
@@ -1048,32 +1050,30 @@ public class Solutions {
     /**
      *
      * @param coins  list of coins can be used
+     * @param index  index of coins need to calculate amount in current function
      * @param targetAmount  target amount by using coins
      * @return count of coin combinations that can make target amount
      */
-    int getCountOfCoinCombination(List<Integer> coins, int targetAmount) {
-        ///// continue making...
+    int getCountOfCoinCombination(List<Integer> coins, int index, int targetAmount) {
 
+        //continue..
+        if( index >= coins.size()) return 0;
 
-        if( targetAmount == 0 ) return 0;
+        int coin = coins.get(index); //coin for this
+        int maxCount = targetAmount / coin;  //max count for loop
 
-        int count = 0;
-        Collections.sort(coins, Collections.reverseOrder());
+        for (int i = 0; i <= maxCount; i++) {
 
-        int i = 0;
-        while (true) {
-            int coinValue = coins.get(0) * i++;
-            if( coinValue > targetAmount ) break;
-            if( coins.size() == 1 && coinValue != targetAmount ) continue;
+            if( coin * i < targetAmount ) return getCountOfCoinCombination(coins, index++, targetAmount - coin * i);
 
-            List<Integer> coins2 = new ArrayList<>(coins);
-            coins2.remove(0);
-            count += getCountOfCoinCombination(coins2, targetAmount - coinValue);
+//            if( targetAmount - coin * i < 0 ) return 0;
+//            if( targetAmount - coin * i == 0 ) return 1;
+//
+//            if( index + 1 >= coins.size() ) return 0;
+//            return getCountOfCoinCombination(coins, index++, targetAmount - coin * i);
         }
 
-        System.out.println("coin size : " + coins.size() + ", count : " + count);
-
-        return count;
+        return 0;
     }
 
 
