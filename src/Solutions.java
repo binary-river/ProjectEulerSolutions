@@ -50,7 +50,8 @@ public class Solutions {
 //        solution28();
 //        solution29();
 //        solution30();
-        solution31();
+//        solution31();
+        solution32();
     }
 
 
@@ -1060,8 +1061,81 @@ public class Solutions {
         System.out.println("result : " + result[200]);
     }
 
+    void solution32() {
+        /**
+         * n-pandigital number is a number makes use of all the digits 1 to n only once.
+         * 5-pandigital number can be a 12345, 54321 ...
+         * Find sum of all products whose concatenation of multiplicand, multiplier, product is 9-pandigital number
+         * ex. 7254 = 39 x 186
+         */
+
+        /**
+         *  digit of product can not be bigger than sum of digits of multiplicand and multiplier
+         *  digit of i can be 1 or 2
+         *  digit of j can be 4 or 3
+         */
+        int productLimit = powInt(10, 4); // multiplicand * multiplier must be under 10000
+        Set<Integer> productSet = new HashSet<>();
+
+        for (int i = 1; i <= 99; i++) {
+            for (int j = 100; j <= 9999; j++) {
+                int temp = i*j;
+                if( temp >= productLimit ) continue;
+                if (isPanDigital(i + "" + j + "" + temp)) {
+                    productSet.add(temp);
+                }
+            }
+        }
+
+        int result = 0;
+        for (Integer integer : productSet) {
+            result += integer;
+        }
+
+        System.out.println("result : " + result);
+    }
+
 
     /**********************************************************************************************************/
+
+
+    /**
+     *
+     * @param str  input string
+     * @return true if concatenation of input string is 9-pandigital number
+     *         otherwise, return false
+     */
+    boolean isPanDigital(String str) {
+
+        List<Character> oneToNine = new ArrayList<>(List.of('1', '2', '3', '4', '5', '6', '7', '8', '9'));
+
+        //check length
+        if( str.length() != 9 ) return false;
+
+        //compare input string and List of 1 to 9 by removing element in list
+        for (int i = 0; i < str.length(); i++) {
+            if (oneToNine.remove((Character)str.charAt(i)) != true) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param str  input string
+     * @return  true if str has duplicate characters itself
+     *          ,otherwise return false
+     */
+    boolean isDupCharString(String str) {
+
+        for (int i = 0; i < str.length()-1; i++) {
+            for (int j = i+1; j < str.length(); j++) {
+                if( str.charAt(i) == str.charAt(j) ) return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      *
