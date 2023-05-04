@@ -1039,43 +1039,29 @@ public class Solutions {
          */
 
         List<Integer> coins = new ArrayList<>(List.of(1, 2, 5, 10, 20, 50, 100, 200));
-        Collections.sort(coins, Collections.reverseOrder());
+        int[] result = new int[201];  //result. index is the amount can be made by coin. value is the ways to make that amount
 
-        System.out.println("result : " + getCountOfCoinCombination(coins, 0,200));
+        //first, need to start from 0. making 0 only has one case. nothing selected
+        result[0] = 1;
+
+        //now, from 1 pence to 2 pounds, find ways to make each amount. using previous value
+        //ex. using 1,2,5 pence, we can calculate the ways to make 20 pence by adding some ways of using 5 pence at least once
+        //    to the ways to make 20 pence by only 1 and 2 pences
+        //    and the ways of using 5 pence at least once to make 20 pence is the ways of making 15 pence using 1,2,5 pences
+        //    ( 20 - 5 = 15. so, getting the ways of making 15 pences by using 1,2,5 pences is same as making 20 pences by using 5 pence at least once )
+        //so, the ways of making 20 pence by 1, 2 pences + the ways of making 15 pence by 1,2,5 pences = the ways of making 20 pence by 1,2,5 pences
+
+        for (Integer coin : coins) {
+            for (int i = coin; i <= 200; i++) {
+                result[i] += result[i - coin];
+            }
+        }
+
+        System.out.println("result : " + result[200]);
     }
 
 
     /**********************************************************************************************************/
-
-    /**
-     *
-     * @param coins  list of coins can be used
-     * @param index  index of coins need to calculate amount in current function
-     * @param targetAmount  target amount by using coins
-     * @return count of coin combinations that can make target amount
-     */
-    int getCountOfCoinCombination(List<Integer> coins, int index, int targetAmount) {
-
-        //continue..
-        if( index >= coins.size()) return 0;
-
-        int coin = coins.get(index); //coin for this
-        int maxCount = targetAmount / coin;  //max count for loop
-
-        for (int i = 0; i <= maxCount; i++) {
-
-            if( coin * i < targetAmount ) return getCountOfCoinCombination(coins, index++, targetAmount - coin * i);
-
-//            if( targetAmount - coin * i < 0 ) return 0;
-//            if( targetAmount - coin * i == 0 ) return 1;
-//
-//            if( index + 1 >= coins.size() ) return 0;
-//            return getCountOfCoinCombination(coins, index++, targetAmount - coin * i);
-        }
-
-        return 0;
-    }
-
 
     /**
      *
