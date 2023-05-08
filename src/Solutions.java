@@ -51,7 +51,8 @@ public class Solutions {
 //        solution29();
 //        solution30();
 //        solution31();
-        solution32();
+//        solution32();
+        solution33();
     }
 
 
@@ -1096,7 +1097,83 @@ public class Solutions {
     }
 
 
+    void solution33() {
+        /**
+         * The fraction 49/98 is a curious fraction,
+         * as an inexperienced mathematician in attempting to simplify it
+         * may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+         * We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
+         * There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
+         * If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
+         */
+
+        /**
+         * A correctly simplified fraction of 49/98 is same as a incorrectly simplified one ( incorrectly simplifying means canceling numbers exist both in numerator and denominator ).
+         * ( A correctly simplified fraction of 49/98 is 1/2. A incorrectly simplified fraction of 49/98 is 4/8 by canceling 9s. )
+         * There are 4 fractions, like above less than one in value, which containing two digits in the numerator and denominator. ( 49/98, 30/50 excluded )
+         * Find the value of denominator of product of these fractions, as its lowest common terms.
+         */
+
+        //numerator   : 2 digits
+        //denominator : 2 digits
+        /**
+         *     10 <= numerator   <= 99
+         *     10 <= denominator <= 99
+         *
+         */
+
+        //first, canceling same number
+        //simplify both.
+        //compare. --> same -> add to result
+
+        int[] ints = simplifyFraction(93, 96);
+        for (int anInt : ints) {
+            System.out.println("result : " + anInt);
+        }
+
+        continue..
+    }
+
+
     /**********************************************************************************************************/
+
+
+    /**
+     *
+     * @param numerator    numerator of fraction need to be simplified
+     * @param denominator  denominator of fraction need to be simplified
+     * @return  integer array length of 2. array[0] is numerator simplified, array[1] is denominator simplified.
+     */
+    int[] simplifyFraction(int numerator, int denominator) {
+
+        List<Integer> primesOfNumerator = getListOfPrimeFactorization(numerator);
+        List<Integer> primesOfDenominator = getListOfPrimeFactorization(denominator);
+        List<Integer> duplicateNumbers = new ArrayList<>(); //same numbers of numerator and denominator
+
+
+        //find same prime numbers and canceling it in numerator
+        for (Integer d : primesOfDenominator) {
+            if (primesOfNumerator.contains(d)) {
+                duplicateNumbers.add(d);
+                primesOfNumerator.remove(d);
+            }
+        }
+
+        //canceling denominator
+        primesOfDenominator.removeAll(duplicateNumbers);
+
+        int[] result = {1, 1};
+
+        for (Integer n : primesOfNumerator) {
+            result[0] = result[0] * n;
+        }
+
+        for (Integer d : primesOfDenominator) {
+            result[1] = result[1] * d;
+        }
+
+        return result;
+    }
 
 
     /**
