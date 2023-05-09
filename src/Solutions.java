@@ -53,6 +53,7 @@ public class Solutions {
 //        solution31();
 //        solution32();
         solution33();
+//        solutionTest();
     }
 
 
@@ -1110,7 +1111,7 @@ public class Solutions {
         /**
          * A correctly simplified fraction of 49/98 is same as a incorrectly simplified one ( incorrectly simplifying means canceling numbers exist both in numerator and denominator ).
          * ( A correctly simplified fraction of 49/98 is 1/2. A incorrectly simplified fraction of 49/98 is 4/8 by canceling 9s. )
-         * There are 4 fractions, like above less than one in value, which containing two digits in the numerator and denominator. ( 49/98, 30/50 excluded )
+         * There are 4 fractions, like above less than one in value, which containing two digits in the numerator and denominator. ( trivial type excluded. like 30/50 )
          * Find the value of denominator of product of these fractions, as its lowest common terms.
          */
 
@@ -1122,24 +1123,99 @@ public class Solutions {
          *
          */
 
-        //first, canceling same number
-        //simplify both.
-        //compare. --> same -> add to result
+        List<int[]> result = new ArrayList<>();
 
-        int[] ints = simplifyFraction(93, 96);
-        for (int anInt : ints) {
-            System.out.println("result : " + anInt);
+        for (int i = 10; i < 100; i++) {
+            for (int j = 10; j < 100; j++) {
+                if( i >= j ) continue;
+                if( i % 10 == 0 ) continue;
+
+                //incorrect version of fraction
+                String[] canceledString = cancelingSameCharacters(i + "", j + "");
+
+                //not finding canceling result is none, only zero(0) remains, or doesn't have numbers can be canceled
+                if( canceledString[0].equals("") || canceledString[1].equals("") ) continue;
+                if( canceledString[0].equals("0") || canceledString[1].equals("0") ) continue;
+                if( canceledString[0].equals(i+"") || canceledString[1].equals(j+"") ) continue;
+
+                int[] canceledSimplifiedFraction = simplifyFraction(Integer.parseInt(canceledString[0]), Integer.parseInt(canceledString[1]));
+
+                //correct version of fraction
+                int[] normalSimplifiedFraction = simplifyFraction(i, j);
+
+                if (Arrays.compare(normalSimplifiedFraction, canceledSimplifiedFraction) == 0) {
+                    int[] temp = {i, j};
+                    result.add(temp);
+//                    System.out.println("----------------------------------------------------");
+//                    System.out.println(Arrays.toString(temp));
+//                    System.out.println(Arrays.toString(canceledSimplifiedFraction));
+//                    System.out.println(Arrays.toString(normalSimplifiedFraction));
+//                    System.out.println("----------------------------------------------------");
+                }
+            }
         }
 
-        continue..
+        int productOfNumeratorsInResult = 1;
+        int productOfDenominatorsInResult = 1;
+
+        for (int[] ints : result) {
+//            System.out.println(Arrays.toString(ints));
+            productOfNumeratorsInResult = productOfNumeratorsInResult * ints[0];
+            productOfDenominatorsInResult = productOfDenominatorsInResult * ints[1];
+        }
+
+        int[] ints = simplifyFraction(productOfNumeratorsInResult, productOfDenominatorsInResult);
+        System.out.println(Arrays.toString(ints));
+
+    }
+
+    void solutionTest() {
+        int[] ints = simplifyFraction(2, 4);
+        System.out.println(Arrays.toString(ints));
     }
 
 
     /**********************************************************************************************************/
 
+    /**
+     * returns an array of strings which same characters removed on both input string1 and input string2
+     * @param str1
+     * @param str2
+     * @return an string array length of 2. array[0] : canceled str1, array[1] : canceled str2
+     */
+    String[] cancelingSameCharacters(String str1, String str2) {
+
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+
+        for (int i = 0; i < chars1.length; i++) {
+            for (int j = 0; j < chars2.length; j++) {
+                if (chars1[i] == chars2[j]) {
+                    chars1[i] = 0x00;
+                    chars2[j] = 0x00;
+                }
+            }
+        }
+
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+
+        for (int i = 0; i < chars1.length; i++) {
+            if( chars1[i] != 0x00 ) sb1.append(chars1[i]);
+        }
+
+        for (int i = 0; i < chars2.length; i++) {
+            if( chars2[i] != 0x00 ) sb2.append(chars2[i]);
+        }
+
+        String[] result = {sb1.toString(), sb2.toString()};
+
+        return result;
+    }
+
 
     /**
-     *
+     * returns an array of integers of simplified numerator and denominator
      * @param numerator    numerator of fraction need to be simplified
      * @param denominator  denominator of fraction need to be simplified
      * @return  integer array length of 2. array[0] is numerator simplified, array[1] is denominator simplified.
@@ -1150,7 +1226,6 @@ public class Solutions {
         List<Integer> primesOfDenominator = getListOfPrimeFactorization(denominator);
         List<Integer> duplicateNumbers = new ArrayList<>(); //same numbers of numerator and denominator
 
-
         //find same prime numbers and canceling it in numerator
         for (Integer d : primesOfDenominator) {
             if (primesOfNumerator.contains(d)) {
@@ -1160,7 +1235,12 @@ public class Solutions {
         }
 
         //canceling denominator
-        primesOfDenominator.removeAll(duplicateNumbers);
+        for (Integer d : duplicateNumbers) {
+            if (primesOfDenominator.contains(d)) {
+                primesOfDenominator.remove(d);
+            }
+        }
+
 
         int[] result = {1, 1};
 
@@ -1177,7 +1257,7 @@ public class Solutions {
 
 
     /**
-     *
+     * Check input string is 9-pandigital number or not
      * @param str  input string
      * @return true if concatenation of input string is 9-pandigital number
      *         otherwise, return false
@@ -1198,7 +1278,7 @@ public class Solutions {
     }
 
     /**
-     *
+     * Check input string has duplicated characters or not
      * @param str  input string
      * @return  true if str has duplicate characters itself
      *          ,otherwise return false
@@ -1215,7 +1295,7 @@ public class Solutions {
     }
 
     /**
-     *
+     * returns recurring cycle of unit fraction ( 1/ input number )
      * @param d denominator of unit fraction
      * @return list of integers that contains recurring cycle numbers ( ex. 0.012340123401234 -> {0,1,2,3,4} )
      */
@@ -1671,6 +1751,10 @@ public class Solutions {
 
         int midResult = num;
         int denominator = 1;
+
+        if (num < 1) {
+            return null;
+        }
 
         while (true) {
             denominator++;
