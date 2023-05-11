@@ -52,11 +52,10 @@ public class Solutions {
 //        solution30();
 //        solution31();
 //        solution32();
-        solution33();
-//        solutionTest();
+//        solution33();
+        solution34();
+
     }
-
-
 
 
     void solution1(){
@@ -1100,27 +1099,15 @@ public class Solutions {
 
     void solution33() {
         /**
-         * The fraction 49/98 is a curious fraction,
-         * as an inexperienced mathematician in attempting to simplify it
-         * may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
-         * We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
-         * There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
-         * If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
-         */
-
-        /**
          * A correctly simplified fraction of 49/98 is same as a incorrectly simplified one ( incorrectly simplifying means canceling numbers exist both in numerator and denominator ).
          * ( A correctly simplified fraction of 49/98 is 1/2. A incorrectly simplified fraction of 49/98 is 4/8 by canceling 9s. )
          * There are 4 fractions, like above less than one in value, which containing two digits in the numerator and denominator. ( trivial type excluded. like 30/50 )
          * Find the value of denominator of product of these fractions, as its lowest common terms.
          */
 
-        //numerator   : 2 digits
-        //denominator : 2 digits
         /**
-         *     10 <= numerator   <= 99
-         *     10 <= denominator <= 99
-         *
+         * 10 <= numerator   <= 99
+         * 10 <= denominator <= 99
          */
 
         List<int[]> result = new ArrayList<>();
@@ -1133,7 +1120,7 @@ public class Solutions {
                 //incorrect version of fraction
                 String[] canceledString = cancelingSameCharacters(i + "", j + "");
 
-                //not finding canceling result is none, only zero(0) remains, or doesn't have numbers can be canceled
+                //skip fractions canceling result is none, only zero(0) remains, or doesn't have numbers can be canceled
                 if( canceledString[0].equals("") || canceledString[1].equals("") ) continue;
                 if( canceledString[0].equals("0") || canceledString[1].equals("0") ) continue;
                 if( canceledString[0].equals(i+"") || canceledString[1].equals(j+"") ) continue;
@@ -1146,11 +1133,6 @@ public class Solutions {
                 if (Arrays.compare(normalSimplifiedFraction, canceledSimplifiedFraction) == 0) {
                     int[] temp = {i, j};
                     result.add(temp);
-//                    System.out.println("----------------------------------------------------");
-//                    System.out.println(Arrays.toString(temp));
-//                    System.out.println(Arrays.toString(canceledSimplifiedFraction));
-//                    System.out.println(Arrays.toString(normalSimplifiedFraction));
-//                    System.out.println("----------------------------------------------------");
                 }
             }
         }
@@ -1159,19 +1141,50 @@ public class Solutions {
         int productOfDenominatorsInResult = 1;
 
         for (int[] ints : result) {
-//            System.out.println(Arrays.toString(ints));
             productOfNumeratorsInResult = productOfNumeratorsInResult * ints[0];
             productOfDenominatorsInResult = productOfDenominatorsInResult * ints[1];
         }
 
         int[] ints = simplifyFraction(productOfNumeratorsInResult, productOfDenominatorsInResult);
         System.out.println(Arrays.toString(ints));
-
     }
 
-    void solutionTest() {
-        int[] ints = simplifyFraction(2, 4);
-        System.out.println(Arrays.toString(ints));
+
+    void solution34() {
+        /**
+         * 145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
+         * Find the sum of all numbers which are equal to the sum of the factorial of their digits.
+         * Note: As 1! = 1 and 2! = 2 are not sums they are not included.
+         */
+
+        /**
+         *  9! = 362880
+         *  number : input number
+         *  digit count : number's digit count, ex. digit count of number 2312 is 4.
+         *  so.. adding 1 digit, max of digit factorial count will be 362880 up.
+         *  362880 * digit count > max value of number will be a maximum number.
+         */
+
+        //Find number that digit factorial can't not be bigger after that number.
+        long nineFactorial = getFactorialCount(9);
+        long maxNumber = 1L;
+        long digits = 1L;
+
+        while (maxNumber <= nineFactorial * digits) {
+            maxNumber = maxNumber * 10;
+            digits++;
+        }
+
+        //adjusting max number to max of 9!s
+        maxNumber = nineFactorial * (digits-1) + 1;
+
+        System.out.println("9!:" + nineFactorial);
+        System.out.println("maxNumber : " + maxNumber + ", digits : " + digits);
+
+
+
+
+
     }
 
 
