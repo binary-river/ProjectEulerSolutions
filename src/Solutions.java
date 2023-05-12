@@ -43,9 +43,9 @@ public class Solutions {
 //        solution22();
 //        solution23();
 //        solution24();
-//        solution26_improved();
 //        solution25();
 //        solution26();
+//        solution24_improved();
 //        solution27();
 //        solution28();
 //        solution29();
@@ -54,7 +54,6 @@ public class Solutions {
 //        solution32();
 //        solution33();
         solution34();
-
     }
 
 
@@ -828,7 +827,7 @@ public class Solutions {
     }
 
 
-    void solution26_improved() {
+    void solution24_improved() {
         /**
          * lexicongraphic order, 0~9, find millionth order
          */
@@ -1169,6 +1168,7 @@ public class Solutions {
         long nineFactorial = getFactorialCount(9);
         long maxNumber = 1L;
         long digits = 1L;
+        long result = 0L;
 
         while (maxNumber <= nineFactorial * digits) {
             maxNumber = maxNumber * 10;
@@ -1178,17 +1178,39 @@ public class Solutions {
         //adjusting max number to max of 9!s
         maxNumber = nineFactorial * (digits-1) + 1;
 
-        System.out.println("9!:" + nineFactorial);
-        System.out.println("maxNumber : " + maxNumber + ", digits : " + digits);
+        //from 10 to max number, need to check sum of digit factorial is same as original number. ( As 1! = 1 and 2! = 2 are not sums they are not included. )
+        for (int i = 10; i <= maxNumber; i++) {
+            if (i == sumOfDigitFactorial(i)) {
+                result += i;
+            }
+        }
 
-
-
-
-
+        System.out.println("result : " + result);
     }
 
 
     /**********************************************************************************************************/
+
+    /**
+     * return sum of factorials using digit in input number.
+     * (ex. input number : 323 -> return 3!+2!+3!)
+     * @param number : input number
+     * @return sum of digit factorials of input number
+     */
+    long sumOfDigitFactorial(int number) {
+
+        long result = 0L;
+        int res = number;
+        int digit = 0;
+
+        while (res != 0) {
+            digit  = res % 10;
+            res = res /10;
+            result += getFactorialCount(digit);
+        }
+
+        return result;
+    }
 
     /**
      * returns an array of strings which same characters removed on both input string1 and input string2
@@ -1412,7 +1434,7 @@ public class Solutions {
 
 
     long getFactorialCount(int n) {
-        long result = 0L;
+        long result = 1L;
 
         for (int i = 1; i <= n; i++) {
             result = (result == 0 ? 1 : result) * i;
