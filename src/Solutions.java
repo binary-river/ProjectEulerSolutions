@@ -53,7 +53,8 @@ public class Solutions {
 //        solution31();
 //        solution32();
 //        solution33();
-        solution34();
+//        solution34();
+        solution35();
     }
 
 
@@ -1187,8 +1188,68 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution35() {
+        /**
+         * Find count of all circular primes below one million
+         * circular prime : if all rotated numbers are prime, it's circular prime.( ex. 197 and rotated numbers of 197 are all primes. 197, 719, 971 )
+         */
+
+        int limit = 1000000;
+        List<Integer> resultList = new ArrayList<>();
+
+        //from 2 to one million
+        for (int i = 2; i < limit; i++) {
+            if(!validPrimeNumber(i)) continue;
+
+            //rotate and check prime
+            boolean allPrimesYn = true;
+            for (int j = 1; j < Integer.toString(i).length(); j++) {
+                if (!validPrimeNumber(rotateIntegerToRight(j, i))) {
+                    allPrimesYn = false;
+                    break;
+                }
+            }
+
+            //if there's none-prime in rotated numbers, then continue.
+            if( !allPrimesYn ) continue;
+
+            resultList.add(i);
+        }
+
+        for (Integer integer : resultList) {
+            System.out.println("result : " + integer);
+        }
+
+        System.out.println("count : " + resultList.size());
+
+    }
 
     /**********************************************************************************************************/
+
+
+    /**
+     * rotate integer to right. for example, rotateIntegerToRight(3,1234) returns 2341.
+     * @param shift  : integer indicate how many cells want to move to right.
+     * @param number : input number will be rotated.
+     * @return rotated number
+     */
+    int rotateIntegerToRight(int shift, int number) {
+
+        String numStr = Integer.toString(number);
+        int numLen = numStr.length();
+        char[] charArr = new char[numLen];  //rotated characters.
+
+        for (int i = 0; i < numLen; i++) {
+            int newIndex = i + shift;
+            newIndex = newIndex % numLen;
+            charArr[newIndex] = numStr.charAt(i);
+        }
+
+        String resultStr = new String(charArr);
+        System.out.println(resultStr);
+
+        return Integer.parseInt(resultStr);
+    }
 
     /**
      * return sum of factorials using digit in input number.
