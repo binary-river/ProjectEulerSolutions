@@ -54,7 +54,8 @@ public class Solutions {
 //        solution32();
 //        solution33();
 //        solution34();
-        solution35();
+//        solution35();
+        solution36();
     }
 
 
@@ -1224,7 +1225,43 @@ public class Solutions {
 
     }
 
+    void solution36() {
+        /**
+         * Find the sum of all numbers below one million that are plindrome both in base 10 and base 2.
+         * ex. 585 is palindrome, and binary of 585, 1001001001 is also palindrome.
+         */
+
+        int limit = 1000000; //max
+
+        List<Integer> resultList = new ArrayList<>();
+
+        //check palindrome from 1 to one million
+        for (int i = 1; i < limit; i++) {
+            if( !isPalindrome(i) ) continue;
+            if( !isBinaryPalindrome(i) ) continue;
+            resultList.add(i);
+        }
+
+        long result = 0L;
+        for (Integer integer : resultList) {
+            result += integer;
+        }
+
+        System.out.println("result : " + result);
+    }
+
     /**********************************************************************************************************/
+
+    /**
+     * valid if input number's binary is a palindrome or not
+     * @param num : integer want to know if binary is palindrome
+     * @return true if input number's binary is a palindrome
+     *         false if not.
+     */
+    boolean isBinaryPalindrome(int num) {
+        String b = Integer.toBinaryString(num);
+        return isPalindromeStr(b);
+    }
 
 
     /**
@@ -2169,18 +2206,27 @@ public class Solutions {
     }
 
 
-    /**
+    /** valid if input number is palindrome number or not
      * @param num
      * @return true if input is a palindrome number
      *         false if input is not a palindrome number
      */
     boolean isPalindrome(int num) {
         String s = Integer.toString(num);
+        return isPalindromeStr(s);
+    }
 
+
+    /**
+     * valid if input string is palindrome or not
+     * @param s
+     * @return true if input is a palindrome string
+     *         false if input is not a palindrome string
+     */
+    boolean isPalindromeStr(String s) {
         for (int i = 0; i < s.length()/2; i++) {
             if( s.charAt(i) != s.charAt(s.length()-1-i)) return false;
         }
-
         return true;
     }
 
