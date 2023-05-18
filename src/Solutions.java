@@ -55,7 +55,8 @@ public class Solutions {
 //        solution33();
 //        solution34();
 //        solution35();
-        solution36();
+//        solution36();
+        solution37();
     }
 
 
@@ -1250,6 +1251,59 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution37() {
+        /**
+         * The number 3797 has an interesting property. Being prime itself,
+         * it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7.
+         * Similarly we can work from right to left: 3797, 379, 37, and 3.
+         * Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+         * NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
+         */
+
+        List<Integer> resultList = new ArrayList<>();
+
+        int num = 9;
+        boolean primeYn = true;
+        while (true) {
+            num++;
+
+            //check num is prime
+            primeYn = validPrimeNumber(num);
+            if( primeYn == false ) continue;
+
+            String numStr = num+""; //string of number
+
+
+            //check substrings of num are prime
+            for (int i = 1; i < numStr.length(); i++) {
+                String temp = numStr.substring(i);
+
+                primeYn = validPrimeNumber(Long.parseLong(temp));
+                if( primeYn == false ) break;
+            }
+            if( primeYn == false ) continue;
+
+
+            //check substrings of num are prime ( reverse order )
+            for (int i = numStr.length(); i >=1; i--) {
+                primeYn = validPrimeNumber(Long.parseLong(numStr.substring(0, i)));
+                if( primeYn == false ) break;
+            }
+            if( primeYn == false ) continue;
+
+
+            resultList.add(num);
+            if( resultList.size() >= 11 ) break;
+        }
+
+        int result = 0;
+        for (Integer integer : resultList) {
+            result += integer;
+        }
+
+        System.out.println("result : " + result);
+    }
+
     /**********************************************************************************************************/
 
     /**
@@ -2240,6 +2294,8 @@ public class Solutions {
     boolean validPrimeNumber(long number) {
 
         if( number < 0 ) number = number * -1;
+
+        if( number == 1 ) return false;
 
         for (long i = 2L; i*i <= number; i++) {
             if( number % i == 0 ) return false;
