@@ -56,7 +56,8 @@ public class Solutions {
 //        solution34();
 //        solution35();
 //        solution36();
-        solution37();
+//        solution37();
+        solution38();
     }
 
 
@@ -1303,6 +1304,60 @@ public class Solutions {
 
         System.out.println("result : " + result);
     }
+
+
+
+    //too slow. need to find another way
+    void solution38() {
+        /**
+         * 192 x 1 = 192, 192 x 2 = 384, 192 x 3 = 576. Then concatenated number of products becomes 1-9 pandigital ( 192384576 ).
+         * And it can be written as 192 x (1,2,3) = 192384576
+         * what is the largest pandigital 9-digit number by ( numeric x (1,2...n) ) ? ( n > 1 )
+         */
+
+        // numeric * (1,2 .. n )
+        // limitation of numeric can be a number that is over 9 digit number when multiply 2.
+        // limitation of numeric can be placed as 500000000
+
+        int limit = 500000000;
+        int maxPandigital = 0;
+
+        //iter 1 to limit, product 1 to n.., if concatenated product's length is 9, then check, if over 9, then continue.
+
+        for (int i = 1; i < limit; i++) {
+
+            StringBuilder sb = new StringBuilder();
+            boolean pandigitalYn = false;
+
+            int n = 1;
+            while (true) {
+                sb.append(Integer.toString(i * n));
+
+                //check length
+                if (sb.length() == 9) {
+                    pandigitalYn = isPanDigital(sb.toString());
+                    break;
+                } else if (sb.length() > 9) {
+                    break;
+                }
+
+                if( isDupCharString(sb.toString()) ) break;
+
+                n++;
+            }
+
+            if( n <= 1 || pandigitalYn == false ) continue;
+
+
+            int currPandigital = Integer.parseInt(sb.toString());
+            if (maxPandigital < currPandigital ) maxPandigital = currPandigital;
+        }
+
+        System.out.println("result : " + maxPandigital);
+
+    }
+
+
 
     /**********************************************************************************************************/
 
