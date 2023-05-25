@@ -57,7 +57,9 @@ public class Solutions {
 //        solution35();
 //        solution36();
 //        solution37();
-        solution38();
+//        solution38();
+//        solution38_improved();
+        solution39();
     }
 
 
@@ -1316,14 +1318,11 @@ public class Solutions {
          */
 
         // numeric * (1,2 .. n )
-        // limitation of numeric can be a number that is over 9 digit number when multiply 2.
-        // limitation of numeric can be placed as 500000000
-
-        int limit = 500000000;
+        // limitation of numeric can be a number that is over 9 digit number when multiply 1 + multiply 2
+        int limit = (1000000000/3) + 1;
         int maxPandigital = 0;
 
         //iter 1 to limit, product 1 to n.., if concatenated product's length is 9, then check, if over 9, then continue.
-
         for (int i = 1; i < limit; i++) {
 
             StringBuilder sb = new StringBuilder();
@@ -1355,11 +1354,76 @@ public class Solutions {
 
         System.out.println("result : " + maxPandigital);
 
+
     }
 
 
+    void solution39() {
+        /**
+         * If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
+         * {20,48,52}, {24,45,51}, {30,40,50}
+         * For which value of p ≤ 1000, is the number of solutions maximised?
+         */
+
+        // 3 <= p <= 1000
+        int pOfMaxSolutions = 0;
+        int maxSolutions = 0;
+        
+        for (int p = 3; p <= 1000; p++) {
+            int solutions = getRightAngleTriangleCountByPerimeter(p);
+
+            if (maxSolutions < solutions) {
+                maxSolutions = solutions;
+                pOfMaxSolutions = p;
+            }
+        }
+
+        System.out.println("p of max : " + pOfMaxSolutions);
+        System.out.println("max sols : " + maxSolutions);
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     * Get count of right angled triangle with input perimeter
+     * @param p perimeter
+     * @return  count of right angled triangle with perimeter
+     */
+    int getRightAngleTriangleCountByPerimeter(int p) {
+        /**
+         *  a <= b < c
+         *  (a+b+c)/3 < c < a+b
+         *  a^2 + b^2 = c^2
+         */
+
+        int result = 0; //count
+        int c;  //adjacent of triagle
+        int adder = p % 2 == 0 ? -1 : 0;
+
+        //find value of minimum c and maximum c
+        int minC = p / 3 + 1;
+        int maxC = p / 2 + adder;
+
+//        System.out.println("minC : " + minC + ", maxC : " + maxC);
+
+        c = maxC;
+        while (c >= minC) {
+
+            //get a, b
+            int b = p - c;
+            int a = 0;
+            while (--b >= ++a) {
+//                System.out.println("a : " + a + ", b : " + b + ", c : " + c);
+                if( b >= c ) continue;
+                if (a * a + b * b == c * c) result++;
+            }
+
+            c--;
+        }
+
+        return result;
+    }
 
     /**
      * valid if input number's binary is a palindrome or not
