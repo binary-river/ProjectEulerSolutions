@@ -60,7 +60,8 @@ public class Solutions {
 //        solution38();
 //        solution38_improved();
 //        solution39();
-        solution40();
+//        solution40();
+        solution41();
     }
 
 
@@ -1412,8 +1413,50 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution41() {
+        /**
+         * Find largest n-digit pandigital prime number
+         * (n-digit pandigital means number made use of all digits 1 to n only once )
+         */
+
+        // limitation is 1000000000 ( 1-9, only once used, must be below minimum of 10-digit number )
+
+        // from limitaion-1 to 2, find maximum pandigital prime number.
+
+        // need function that valid n-digit pandigital number
+
+        System.out.println(isNDigitPanDigital("1234"));
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     * Check if input string is n-digit pandigital.(n is length of input string)
+     * for example, "1234" is 4-digit pandigital, so it will be returned true. but "2234" is not a 4-digit pandigital then it will be returned false.
+     * another example, "987123" is 6-digit pandigital, returned true. "987113" is not a 6-digit pandigital, returned false
+     * @param str
+     * @return true if input string is n-digit pandigital, otherwise return false
+     */
+    boolean isNDigitPanDigital(String str) {
+
+        List<Character> digits = new ArrayList<>();
+
+        // 9-digit is maximum.
+        if( str.length() > 9 ) return false;
+
+        for (int i = 1; i <= str.length(); i++) {
+            digits.add(Integer.toString(i).charAt(0));
+        }
+
+        //compare input string and list of digits by removing element
+        for (int i = 0; i < str.length(); i++) {
+            if (digits.remove((Character)str.charAt(i)) != true) return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * Get count of right angled triangle with input perimeter
