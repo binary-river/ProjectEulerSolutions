@@ -59,7 +59,8 @@ public class Solutions {
 //        solution37();
 //        solution38();
 //        solution38_improved();
-        solution39();
+//        solution39();
+        solution40();
     }
 
 
@@ -1380,6 +1381,35 @@ public class Solutions {
 
         System.out.println("p of max : " + pOfMaxSolutions);
         System.out.println("max sols : " + maxSolutions);
+    }
+
+    void solution40() {
+        /**
+         * there's an irrational fraction which is created by concatenating positive integers.
+         *   0.123456789101112131415161718192021...
+         * 12th digit of this fractional part is 1
+         * When d(n) is nth digit of fractional part, find d(1) * d(10) * d(100) ... * d(1000000)
+         */
+
+        int maxSize = 1000000;  //max legnth of fractional part
+        StringBuilder sb = new StringBuilder();
+
+        //make a fraction by concatenating positive integers until fractional length under maxSize
+        int num = 0;
+        while (true) {
+            num++;
+            sb.append(num);
+            if( sb.length() > maxSize ) break;
+        }
+
+        String fraction = sb.toString();
+        int result = 1;
+        //get result of d(10^0) * ... * d(10^6)
+        for (int i = 0; i <= 6; i++) {
+            result = result * Integer.parseInt(fraction.charAt(powInt(10,i)-1)+"");
+        }
+
+        System.out.println("result : " + result);
     }
 
 
