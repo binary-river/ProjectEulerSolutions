@@ -61,7 +61,8 @@ public class Solutions {
 //        solution38_improved();
 //        solution39();
 //        solution40();
-        solution41();
+//        solution41();
+        solution42();
     }
 
 
@@ -1429,6 +1430,36 @@ public class Solutions {
                 break;
             }
         }
+    }
+
+    void solution42() {
+        /**
+         *  triangle numbers is given by this formula : 1/2 * n ( n+1 )
+         *  By converting each letter in a word to a number corresponding to its alphabetical position and adding these values we form a word value.
+         *  For example, the word value for SKY is 19 + 11 + 25 = 55.
+         *  If the word value is a triangle number then we shall call the word a triangle word.
+         *  how many are triangle words in solution42_input.txt ?
+         */
+
+        String fileName = "./src/input/solution42_input.txt";
+        String fileContents = null;
+        File file = new File(fileName);
+        try {
+            fileContents = getFileByOneline(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(fileContents == null ) return;
+
+        String s = fileContents.replaceAll("\"", "");
+        String[] words = s.split(",");
+
+        for (String word : words) {
+            System.out.println(word);
+        }
+
+        //continue making..
 
     }
 
