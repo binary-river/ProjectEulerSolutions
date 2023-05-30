@@ -1420,38 +1420,60 @@ public class Solutions {
          */
 
         // limitation is 1000000000 ( 1-9, only once used, must be below minimum of 10-digit number )
+        int limit = 1000000000;
 
         // from limitaion-1 to 2, find maximum pandigital prime number.
+        for (int i = limit-1; i >= 2; i--) {
+            if ( isNDigitPanDigital(i) && validPrimeNumber(i)) {
+                System.out.println("result : " + i);
+                break;
+            }
+        }
 
-        // need function that valid n-digit pandigital number
-
-        System.out.println(isNDigitPanDigital("1234"));
     }
 
 
     /**********************************************************************************************************/
 
     /**
-     * Check if input string is n-digit pandigital.(n is length of input string)
+     * Check if input number is n-digit pandigital.(n is length of input number)
      * for example, "1234" is 4-digit pandigital, so it will be returned true. but "2234" is not a 4-digit pandigital then it will be returned false.
      * another example, "987123" is 6-digit pandigital, returned true. "987113" is not a 6-digit pandigital, returned false
-     * @param str
-     * @return true if input string is n-digit pandigital, otherwise return false
+     * @param num
+     * @return true if input number is n-digit pandigital, otherwise return false
      */
-    boolean isNDigitPanDigital(String str) {
+    boolean isNDigitPanDigital(int num) {
 
-        List<Character> digits = new ArrayList<>();
+        String str = Integer.toString(num);
+        int strLen = str.length();
 
         // 9-digit is maximum.
-        if( str.length() > 9 ) return false;
+        if( strLen > 9 ) return false;
 
-        for (int i = 1; i <= str.length(); i++) {
-            digits.add(Integer.toString(i).charAt(0));
+        // split number to char array
+        char[] chars = str.toCharArray();
+
+        // check duplicated number
+        for (int i = 0; i < chars.length-1; i++) {
+            for (int j = i+1; j < chars.length; j++) {
+                if( chars[i] == chars[j]) return false;
+            }
         }
 
-        //compare input string and list of digits by removing element
-        for (int i = 0; i < str.length(); i++) {
-            if (digits.remove((Character)str.charAt(i)) != true) return false;
+        //check 1 to n
+        int digit = 1;
+        while (digit <= strLen) {
+            boolean isExistYn = false;
+
+            for (int i = 0; i < str.length(); i++) {
+                if (chars[i] == (char) (digit + '0')) {
+                    isExistYn = true;
+                    break;
+                }
+            }
+
+            if( isExistYn == false ) return false;
+            digit++;
         }
 
         return true;
