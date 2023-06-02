@@ -1441,6 +1441,7 @@ public class Solutions {
          *  how many are triangle words in solution42_input.txt ?
          */
 
+        int result = 0;
         String fileName = "./src/input/solution42_input.txt";
         String fileContents = null;
         File file = new File(fileName);
@@ -1456,15 +1457,46 @@ public class Solutions {
         String[] words = s.split(",");
 
         for (String word : words) {
-            System.out.println(word);
+            int t = getAlphabetNumberIgnoreCase(word);
+            t = t*2; // 1/2 of n(n+1) goes to *2 of t [ 1/2*n(n+1) = t ]
+
+            // root of t must be has precisions, and root(t) * (root(t)+1) should be t
+            double rt = Math.sqrt(t);
+//            System.out.println("word : " + word + ", t : " + t + ", rt: " + rt + ", (int)rt : " + (int)rt );
+            if( rt == (int)rt ) continue;
+            if( (int)rt * (int)(rt+1) == t ) result++;
+//            System.out.println("result : " + result);
         }
 
-        //continue making..
+        System.out.println("result : " + result);
 
     }
 
 
     /**********************************************************************************************************/
+
+    /**
+     * get sum of alphabetical number of input string.
+     * ex. SKY -> 19 + 11 + 25 = 55
+     *     abc -> 1 + 2 + 3 = 6
+     * @param str  input string
+     * @return sum of alphabetical number of input string as positive number
+     *         return -1 if input string contains non-numeric character
+     */
+    int getAlphabetNumberIgnoreCase(String str) {
+        String s = str.toUpperCase();
+        int result = 0;
+
+        //valid numeric value
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if( c < 'A' || c > 'Z') return -1;
+
+            result += c - 'A' +1;
+        }
+
+        return result;
+    }
 
     /**
      * Check if input number is n-digit pandigital.(n is length of input number)
