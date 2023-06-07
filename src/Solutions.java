@@ -61,8 +61,8 @@ public class Solutions {
 //        solution38_improved();
 //        solution39();
 //        solution40();
-//        solution41();
-        solution42();
+        solution41();
+//        solution42();
     }
 
 
@@ -1425,7 +1425,7 @@ public class Solutions {
 
         // from limitaion-1 to 2, find maximum pandigital prime number.
         for (int i = limit-1; i >= 2; i--) {
-            if ( isNDigitPanDigital(i) && validPrimeNumber(i)) {
+            if ( isNDigitPanDigital(i, false) && validPrimeNumber(i)) {
                 System.out.println("result : " + i);
                 break;
             }
@@ -1472,8 +1472,51 @@ public class Solutions {
 
     }
 
+    void solution43() {
+        /**
+         *
+         * 1406357289 is a pandigital number
+         * that d(1)d(2)d(3) is divisible by 2
+         *      d(3)d(4)d(5) is divisible by 3
+         *      d(4)d(5)d(6) is divisible by 5
+         *      ...
+         *      d(8)d(9)d(10) is divisible by 17
+         *
+         * Find sum of all numbers that have those properties.
+         */
+
+        long max = 10000000000L;  //number should be less than minimum of 11 digit number.
+        long min = 1000000000L;   //number should be greater than or equal to minimum of 10 digit number.
+
+
+        for (long i = 0L; i < max; i++) {
+            //Find 0-9 pandigital number.
+            if( !isNDigitPanDigital(i, true) ) continue;
+
+            //valid if sub-strings are divisible by primes orderly.
+
+        }
+
+    }
+
 
     /**********************************************************************************************************/
+
+    /**
+     * valid if 3-substrings are equal to primes orderly.
+     * num[2]num[3]num[4] should be divisible by 2
+     * num[3]num[4]num[5] should be divisible by 3
+     * ...
+     * num[8]num[9]num[10] should be divisible by 17
+     * ...
+     *
+     * @param num
+     * @return true if all 3-substrings are divisible by primes orderly
+     * otherwise return false
+     */
+    boolean isSubStringsDivisibleByPrimeOrderly(long num) {
+
+    }
 
     /**
      * get sum of alphabetical number of input string.
@@ -1499,19 +1542,32 @@ public class Solutions {
     }
 
     /**
-     * Check if input number is n-digit pandigital.(n is length of input number)
-     * for example, "1234" is 4-digit pandigital, so it will be returned true. but "2234" is not a 4-digit pandigital then it will be returned false.
-     * another example, "987123" is 6-digit pandigital, returned true. "987113" is not a 6-digit pandigital, returned false
+     * Check input number is pandigital number.
+     * if zeroBaseYn is true, then number which has all 0 to n-1 digits and has each only once is pandigital number
+     * if zeroBaseYn is false, then number which has all 1 to n digits and has each only once is pandigital number
+     * for example,
+     * under zeroBaseYn is true
+     * 123456 return false.( n = 6, so it should has 0..5 )
+     * 125045 return false
+     * 123045 return true
+     * under zeroBaseYn is false
+     * 123456 return true.
+     * 125045 return false
+     * 123045 return false ( should not contain 0 )
      * @param num
-     * @return true if input number is n-digit pandigital, otherwise return false
+     * @param zeroBaseYn
+     * @return true if input number is pandigital
+     * otherwise, return false
      */
-    boolean isNDigitPanDigital(int num) {
+    boolean isNDigitPanDigital(int num, boolean zeroBaseYn) {
 
         String str = Integer.toString(num);
         int strLen = str.length();
+        int maxLen = zeroBaseYn ? 10 : 9;
+        int base = zeroBaseYn ? 0 : 1;
 
-        // 9-digit is maximum.
-        if( strLen > 9 ) return false;
+        // 9-digit or 10-digit is maximum.
+        if( strLen > maxLen  ) return false;
 
         // split number to char array
         char[] chars = str.toCharArray();
@@ -1523,8 +1579,8 @@ public class Solutions {
             }
         }
 
-        //check 1 to n
-        int digit = 1;
+        //check 1(or 0) to n
+        int digit = base;
         while (digit <= strLen) {
             boolean isExistYn = false;
 
