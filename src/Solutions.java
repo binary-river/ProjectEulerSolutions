@@ -61,8 +61,9 @@ public class Solutions {
 //        solution38_improved();
 //        solution39();
 //        solution40();
-        solution41();
+//        solution41();
 //        solution42();
+        solution43();
     }
 
 
@@ -1485,22 +1486,57 @@ public class Solutions {
          * Find sum of all numbers that have those properties.
          */
 
-        long max = 10000000000L;  //number should be less than minimum of 11 digit number.
-        long min = 1000000000L;   //number should be greater than or equal to minimum of 10 digit number.
+        List<Long> resultList = new ArrayList<>();
 
 
-        for (long i = 0L; i < max; i++) {
-            //Find 0-9 pandigital number.
-            if( !isNDigitPanDigital(i, true) ) continue;
+        //Get pandigital numbers
+        List<String> pandigitals = makeNDigitPandigital(10, true);
+
+        for (String pandigital : pandigitals) {
+            //non-count for start with 0
+            if( pandigital.charAt(0) == '0' ) continue;
+
+            long temp = Long.parseLong(pandigital);
 
             //valid if sub-strings are divisible by primes orderly.
+            if(!isSubStringsDivisibleByPrimeOrderly(temp) ) continue;
 
+            resultList.add(temp);
         }
 
+        long result = 0L;
+        for (Long aLong : resultList) {
+            result += aLong;
+        }
+
+        System.out.println("result : " + result);
     }
 
 
     /**********************************************************************************************************/
+
+    /**
+     * make n-digit pandigital numbers.
+     * if zeroBaseYn is true, than make 0-n pandigital number
+     * else, make 1-n pandigital number
+     * @param n number as n-digit's n
+     * @param zeroBaseYn start from 0(true) or 1(false)
+     * @return list of n-digit pandigital numbers as string
+     * if input is not valid for making pandigital, return null
+     */
+    List<String> makeNDigitPandigital(int n, boolean zeroBaseYn) {
+        int max = zeroBaseYn ? n - 1 : n;
+        int min = zeroBaseYn ? 0 : 1;
+
+        if( max >= 10 ) return null;
+
+        List<String> elements = new ArrayList<>();
+        for (int i = min; i <= max; i++) {
+            elements.add(i + "");
+        }
+
+        return getFullFactorial(elements);
+    }
 
     /**
      * valid if 3-substrings are equal to primes orderly.
@@ -1516,6 +1552,18 @@ public class Solutions {
      */
     boolean isSubStringsDivisibleByPrimeOrderly(long num) {
 
+        int[] primes = {2, 3, 5, 7, 11, 13, 17, 19}; //declare primes under 20
+        String numStr = Long.toString(num);
+
+        // for... 2 to len-3, check divisible by prime
+        int primeIndex = 0;
+        for (int i = 1; i <numStr.length()-2; i++) {
+            int newDigits = Integer.parseInt("" + numStr.charAt(i) + numStr.charAt(i + 1) + numStr.charAt(i + 2));
+//            System.out.println("new Digit : " + newDigits);
+            if( newDigits % primes[primeIndex++] != 0 ) return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1559,9 +1607,9 @@ public class Solutions {
      * @return true if input number is pandigital
      * otherwise, return false
      */
-    boolean isNDigitPanDigital(int num, boolean zeroBaseYn) {
+    boolean isNDigitPanDigital(long num, boolean zeroBaseYn) {
 
-        String str = Integer.toString(num);
+        String str = Long.toString(num);
         int strLen = str.length();
         int maxLen = zeroBaseYn ? 10 : 9;
         int base = zeroBaseYn ? 0 : 1;
