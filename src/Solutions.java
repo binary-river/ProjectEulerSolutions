@@ -1546,10 +1546,6 @@ public class Solutions {
             firstLimit = firstLimit + 10;
         }
 
-        System.out.println("first pentagonal numbers are.. " + getPentagonalNumber(firstNs[0]) + ", " + getPentagonalNumber(firstNs[1]));
-        System.out.println("first pentagonal numbers' Ns are .. " + firstNs[0] + ", " + firstNs[1] );
-        System.out.println("first limit is.. " + firstLimit);
-
         //Find limitation of n by comparing first pair of pentagonal numbers and consecutive pair(n, n+1)
         long baseDifference = getPentagonalNumber(firstNs[1]) - getPentagonalNumber(firstNs[0]);
         int limit = 0;
@@ -1563,13 +1559,10 @@ public class Solutions {
             n++;
         }
 
-        System.out.println("limit : " + limit);
-
         //Find pair of pentagonal numbers whose sum and difference also pentagonal numbers and difference is minimised.
         int[] resultNs = new int[2];
         long result = 0;
         long minimumDifference = baseDifference;
-        System.out.println("first minimum difference : " + minimumDifference);
 
         for (int i = 1; i <= limit - 1; i++) {
             for (int j = i+1; j <= limit; j++) {
@@ -1591,8 +1584,6 @@ public class Solutions {
 
         result = minimumDifference;
 
-        System.out.println("resultNs : " + resultNs[0] + ", " + resultNs[1]);
-        System.out.println("pentagonal numbers : " + getPentagonalNumber(resultNs[0]) + ", " + getPentagonalNumber(resultNs[1]));
         System.out.println("result : " + result);
     }
 
