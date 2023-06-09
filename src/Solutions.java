@@ -63,7 +63,8 @@ public class Solutions {
 //        solution40();
 //        solution41();
 //        solution42();
-        solution43();
+//        solution43();
+        solution44();
     }
 
 
@@ -1512,8 +1513,115 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution44() {
+        /**
+         * Pentagonal numbers are created by formula P(n) = n(3n-1)/2.
+         * first five numbers are : 1, 5, 12, 22, 35 ..
+         * Find difference of pair of pentagonal numbers whose sum and difference also pentagonal numbers and difference is minimised.
+         */
+
+        //Find first pair of pentagonal numbers.( approximately with minimised difference )
+        int firstLimit = 10;
+        int[] firstNs = new int[2];
+        while (true) {
+            boolean foundYn = false;
+
+            for (int i = 1; i <= firstLimit - 1; i++) {
+                for (int j = i+1; j <= firstLimit; j++) {
+                    long pM = getPentagonalNumber(i);
+                    long pN = getPentagonalNumber(j);
+
+                    if( !isPentagonalNumber(pM+pN) ) continue;
+                    if( !isPentagonalNumber(pN-pM) ) continue;
+
+                    foundYn = true;
+                    firstNs[0] = i;
+                    firstNs[1] = j;
+                    break;
+                }
+                if(foundYn) break;
+            }
+
+            if(foundYn) break;
+            firstLimit = firstLimit + 10;
+        }
+
+        System.out.println("first pentagonal numbers are.. " + getPentagonalNumber(firstNs[0]) + ", " + getPentagonalNumber(firstNs[1]));
+        System.out.println("first pentagonal numbers' Ns are .. " + firstNs[0] + ", " + firstNs[1] );
+        System.out.println("first limit is.. " + firstLimit);
+
+        //Find limitation of n by comparing first pair of pentagonal numbers and consecutive pair(n, n+1)
+        long baseDifference = getPentagonalNumber(firstNs[1]) - getPentagonalNumber(firstNs[0]);
+        int limit = 0;
+
+        int n = 1;
+        while (true) {
+            if (getPentagonalNumber(n + 1) - getPentagonalNumber(n) > baseDifference) {
+                limit = n;
+                break;
+            }
+            n++;
+        }
+
+        System.out.println("limit : " + limit);
+
+        //Find pair of pentagonal numbers whose sum and difference also pentagonal numbers and difference is minimised.
+        int[] resultNs = new int[2];
+        long result = 0;
+        long minimumDifference = baseDifference;
+        System.out.println("first minimum difference : " + minimumDifference);
+
+        for (int i = 1; i <= limit - 1; i++) {
+            for (int j = i+1; j <= limit; j++) {
+                long pM = getPentagonalNumber(i);
+                long pN = getPentagonalNumber(j);
+                long sum = pM + pN;
+                long diff = pN - pM;
+
+                if (diff > minimumDifference) break;
+                if( !isPentagonalNumber(sum) ) continue;
+                if( !isPentagonalNumber(diff) ) continue;
+
+                resultNs[0] = i;
+                resultNs[1] = j;
+                minimumDifference = diff;
+
+            }
+        }
+
+        result = minimumDifference;
+
+        System.out.println("resultNs : " + resultNs[0] + ", " + resultNs[1]);
+        System.out.println("pentagonal numbers : " + getPentagonalNumber(resultNs[0]) + ", " + getPentagonalNumber(resultNs[1]));
+        System.out.println("result : " + result);
+    }
+
 
     /**********************************************************************************************************/
+
+
+    /**
+     * valid input number is pentagonal number or not ( pentagonal number of natural number )
+     * @param num
+     * @return  true if input number is pentagonal number
+     * otherwise, return false
+     */
+    boolean isPentagonalNumber(long num) {
+        // formula is.. n(3n-1)/2.
+        // if num = n(3n-1)/2 then root(num*2/3 + 1/36) + 1/6 must be a natural number
+        // for calculation, multiply sqrt(36) to reverse formula
+        double reverse = Math.sqrt(num * 2 * 12 + 1 ) + 1;
+        return reverse / 6 == (int) (reverse / 6) ? true : false;
+    }
+
+    /**
+     * calculate formula n(3n-1)/2
+     * @param n
+     * @return result of formula by input n
+     */
+    long getPentagonalNumber(int n) {
+        return n * (3L * n - 1L) / 2L;
+    }
 
     /**
      * make n-digit pandigital numbers.
