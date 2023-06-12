@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Solutions {
@@ -1522,7 +1524,7 @@ public class Solutions {
 
         //Find first pair of pentagonal numbers.( approximately with minimised difference )
         int firstLimit = 10;
-        int[] firstNs = new int[2];
+        long baseDifference = 0L;
         while (true) {
             boolean foundYn = false;
 
@@ -1535,8 +1537,7 @@ public class Solutions {
                     if( !isPentagonalNumber(pN-pM) ) continue;
 
                     foundYn = true;
-                    firstNs[0] = i;
-                    firstNs[1] = j;
+                    baseDifference = pN - pM;
                     break;
                 }
                 if(foundYn) break;
@@ -1547,21 +1548,15 @@ public class Solutions {
         }
 
         //Find limitation of n by comparing first pair of pentagonal numbers and consecutive pair(n, n+1)
-        long baseDifference = getPentagonalNumber(firstNs[1]) - getPentagonalNumber(firstNs[0]);
         int limit = 0;
-
-        int n = 1;
         while (true) {
-            if (getPentagonalNumber(n + 1) - getPentagonalNumber(n) > baseDifference) {
-                limit = n;
+            limit++;
+            if (getPentagonalNumber(limit + 1) - getPentagonalNumber(limit) > baseDifference) {
                 break;
             }
-            n++;
         }
 
         //Find pair of pentagonal numbers whose sum and difference also pentagonal numbers and difference is minimised.
-        int[] resultNs = new int[2];
-        long result = 0;
         long minimumDifference = baseDifference;
 
         for (int i = 1; i <= limit - 1; i++) {
@@ -1575,16 +1570,12 @@ public class Solutions {
                 if( !isPentagonalNumber(sum) ) continue;
                 if( !isPentagonalNumber(diff) ) continue;
 
-                resultNs[0] = i;
-                resultNs[1] = j;
                 minimumDifference = diff;
 
             }
         }
 
-        result = minimumDifference;
-
-        System.out.println("result : " + result);
+        System.out.println("result : " + minimumDifference);
     }
 
 
