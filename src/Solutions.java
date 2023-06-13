@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Array;
@@ -7,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.IntConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -66,7 +69,8 @@ public class Solutions {
 //        solution41();
 //        solution42();
 //        solution43();
-        solution44();
+//        solution44();
+        test();
     }
 
 
@@ -1576,6 +1580,25 @@ public class Solutions {
         }
 
         System.out.println("result : " + minimumDifference);
+    }
+
+    void test() {
+        int testVar1 = 10;
+
+        class LocalClassTemp {
+            int t1 = testVar1;
+            static int t1Static = 20;
+
+            void printMembers() {
+                System.out.println("t1 : " + t1);
+            }
+
+            static void printMemberStatic(){
+                System.out.println("t1Static : " + t1Static);
+            }
+        }
+
+        LocalClassTemp.printMemberStatic();
     }
 
 
