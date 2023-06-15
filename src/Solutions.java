@@ -70,7 +70,7 @@ public class Solutions {
 //        solution42();
 //        solution43();
 //        solution44();
-        test();
+        solution45();
     }
 
 
@@ -1582,28 +1582,66 @@ public class Solutions {
         System.out.println("result : " + minimumDifference);
     }
 
-    void test() {
-        int testVar1 = 10;
+    void solution45() {
+        /**
+         * Triangle number formula is n(n+1)/2
+         * Pentagonal number formula is n(3n-1)/2
+         * Hexagonal number formula is n(2n-1)
+         * and Triangle(285) = Pentagonal(165) = Hexagonal(143) = 40755.
+         * Find another value that Triangle, Pentagonal, Hexagonal numbers are all equal as next of 40755
+         */
 
-        class LocalClassTemp {
-            int t1 = testVar1;
-            static int t1Static = 20;
+        long r = 40755;
+        while (true) {
+            r++;
 
-            void printMembers() {
-                System.out.println("t1 : " + t1);
-            }
+            double d1 = getUnknownNumberOfTPH(TPHNum.TRIANGLE, r);
+            double d2 = getUnknownNumberOfTPH(TPHNum.PENTAGONAL, r);
+            double d3 = getUnknownNumberOfTPH(TPHNum.HEXAGONAL, r);
 
-            static void printMemberStatic(){
-                System.out.println("t1Static : " + t1Static);
+            if(d1 == (long) d1 && d2 == (long) d2 && d3 == (long) d3){
+                System.out.println("d1: " + d1 + ", d2 : " + d2 + ", d3 : " + d3);
+                break;
             }
         }
 
-        LocalClassTemp.printMemberStatic();
-    }
+        System.out.println("result : " + r);
 
+    }
 
     /**********************************************************************************************************/
 
+    private enum TPHNum {
+        TRIANGLE, PENTAGONAL, HEXAGONAL
+    }
+
+    /**
+     *  Triangle number formula is n(n+1)/2
+     *  Pentagonal number formula is n(3n-1)/2
+     *  Hexagonal number formula is n(2n-1)
+     *  calculate n of T,P,H by input
+     * @param e  enum value ( TRIANGLE, PENTAGONAL, HEXAGONAL )
+     * @param r  Triangle, Pentagonal, Hexagonal number
+     * @return unknown n by formula
+     */
+    double getUnknownNumberOfTPH(TPHNum e, long r) {
+        //Triangle number formula is n(n+1)/2
+        //So, n can be found by sqrt(2*r+1/4)-1/2
+
+        //Pentagonal number formula is n(3n-1)/2
+        //So, n can be found by sqrt(2/3*r+1/36)+1/6
+
+        //Hexagonal number formula is n(2n-1)
+        //So, n can be found by sqrt(1/2*r+1/16) + 1/4
+        double result = 0.0;
+
+        switch(e){
+            case TRIANGLE -> result = (Math.sqrt(8 * r + 1) - 1) / 2;
+            case PENTAGONAL -> result = (Math.sqrt(24 * r + 1) + 1) / 6;
+            case HEXAGONAL -> result = (Math.sqrt(8 * r + 1) + 1) / 4;
+        }
+        return result;
+    }
 
     /**
      * valid input number is pentagonal number or not ( pentagonal number of natural number )
