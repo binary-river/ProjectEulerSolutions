@@ -70,7 +70,8 @@ public class Solutions {
 //        solution42();
 //        solution43();
 //        solution44();
-        solution45();
+//        solution45();
+        solution46();
     }
 
 
@@ -1609,7 +1610,57 @@ public class Solutions {
 
     }
 
+    void solution46() {
+        /**
+         * It was proposed by Christian Goldbach that every odd composite number can be written as the sum of a prime and twice a square.
+         * It turns out that the conjecture was false.
+         * What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
+         */
+
+        // from 3 to infinite, first non-goldbach number which is also a composite odd number
+        long result = 0L;
+        for (long l = 3L; l < Long.MAX_VALUE; l = l+2) {
+            if(validPrimeNumber(l)) continue;
+            if(isGoldbachNumber(l)) continue;
+            result = l;
+            break;
+        }
+
+        System.out.println("result : " + result);
+    }
+
     /**********************************************************************************************************/
+
+    /**
+     * valid input n is Goldbach number or not.
+     * (Goldbach numbers are composite odd that can be written as sum of a prime number and twice a square ( prime number + 2 x natural number )
+     * @param n  input number
+     * @return true if n is Goldbach number
+     * otherwise, return false.
+     */
+    boolean isGoldbachNumber(long n) {
+
+        //valid 1
+        if( validPrimeNumber(n)) return false;
+
+        //Find limit for iter
+        long limit1 = n - 1;
+        long limit2 = (long) Math.sqrt(n/2);
+
+        //valid 2
+        for (int i = 2; i <= limit1; i++) {
+            if( !validPrimeNumber(i) ) continue;
+
+            for (int j = 1; j <= limit2; j++) {
+                if (i + 2 * j * j == n) {
+//                    System.out.println("i : " + i + ", j : " + j );
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     private enum TPHNum {
         TRIANGLE, PENTAGONAL, HEXAGONAL
