@@ -71,7 +71,8 @@ public class Solutions {
 //        solution43();
 //        solution44();
 //        solution45();
-        solution46();
+//        solution46();
+        solution47();
     }
 
 
@@ -1629,7 +1630,52 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution47() {
+        /** The first two consecutive numbers to have two distinct prime factors are:
+         *  14 = 2 * 7
+         *  15 = 3 * 5
+         * Find the first four consecutive integers to have four distinct prime factors each. What is the first of these numbers?
+         */
+
+        //from 1 to infinite, iter
+        long num = 2L;
+        int targetDistinctCount = 4;
+        int targetConsecutiveCount= 4;
+        int count = 0;
+        while (true) {
+//            System.out.println("start input..");
+            count = getCountOfConsecutiveNumbersWithPrimes(num, 0, targetDistinctCount);
+
+            if (count == targetConsecutiveCount) {
+                System.out.println("result : " + num);
+                break;
+            }
+            num = num + count + 1;
+        }
+    }
+
+
+
     /**********************************************************************************************************/
+
+    /**
+     * get how many consecutive numbers have distinct prime numbers as input targetDistinctPrimeCount.
+     * @param num initial number for starting.
+     * @param progress current count of consecutive numbers ( always input 0 from starting. )
+     * @param targetDistinctPrimeCount
+     * @return count of consecutive numbers have distinct prime numbers.
+     */
+    int getCountOfConsecutiveNumbersWithPrimes(long num, int progress, int targetDistinctPrimeCount ) {
+        if( num <= 1 || progress < 0 || targetDistinctPrimeCount <= 0 ) return 0;
+
+        Map<Long, Long> resultOfPrimeFactorization = getResultOfPrimeFactorization(num + progress);
+        int size = resultOfPrimeFactorization.size();
+
+//        System.out.println("num : " + num + ", progress : " + progress + ", size : " + size);
+//        System.out.println("result : " + resultOfPrimeFactorization.toString() );
+
+        return size == targetDistinctPrimeCount ? getCountOfConsecutiveNumbersWithPrimes(num, progress + 1, targetDistinctPrimeCount) : progress;
+    }
 
     /**
      * valid input n is Goldbach number or not.
