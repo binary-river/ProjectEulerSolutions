@@ -72,7 +72,8 @@ public class Solutions {
 //        solution44();
 //        solution45();
 //        solution46();
-        solution47();
+//        solution47();
+        solution48();
     }
 
 
@@ -1654,6 +1655,26 @@ public class Solutions {
         }
     }
 
+    void solution48() {
+        /**
+         * Find the last ten digits of the self powered number series, 1^2 + 2^2 ... 1000^1000
+         */
+
+        //from 1 to 1000,
+        //calculate self powered number by remaining only 10 digits.
+        //then, calculate sum of self powered number by remaining only 10 digits
+
+        long result = 0L;
+        long lastDigits = 10L;
+        long divider = powLong(10, lastDigits);
+
+        for (long i = 1L; i <= 1000L; i++) {
+            result += powLongWithLastDigits(i, i, lastDigits);
+            result = result % divider;
+        }
+
+        System.out.println("result : " + result);
+    }
 
 
     /**********************************************************************************************************/
@@ -2814,6 +2835,26 @@ public class Solutions {
         long result = 1L;
         for (Long e : commonMap.keySet()) {
             result = result * powLong(e, commonMap.get(e));
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param a
+     * @param b
+     * @return last "digits" of result of a^b
+     * for example, a:5, b:3, digits:2
+     * return 25. ( last 2 digits of 125 [5^3] )
+     */
+    long powLongWithLastDigits(long a, long b, long digits) {
+        if( a == 0L ) return 0L;
+
+        long result = 1L;
+        long divider = powLong(10L, digits);
+        for (long i = 0L; i < b; i++) {
+            result = (result * a) % divider;
         }
 
         return result;
