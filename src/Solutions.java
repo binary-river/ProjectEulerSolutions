@@ -73,7 +73,8 @@ public class Solutions {
 //        solution45();
 //        solution46();
 //        solution47();
-        solution48();
+//        solution48();
+        solution49();
     }
 
 
@@ -784,9 +785,9 @@ public class Solutions {
         int targetOrder = 1000000; /* millionth lexicographic */
         String[] elements = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-        List<String> fullFactorial = getFullFactorial(Arrays.asList(elements));
+        List<String> fullPermutations = getFullPermutations(Arrays.asList(elements));
 
-        System.out.println(fullFactorial.get(targetOrder-1));
+        System.out.println(fullPermutations.get(targetOrder-1));
     }
 
     void solution25() {
@@ -1676,6 +1677,67 @@ public class Solutions {
         System.out.println("result : " + result);
     }
 
+    void solution49() {
+        /**
+         * 1487, 4817, 8147 are terms they are all primes, and permutations each other.
+         * Find concatenation of anohter 4-digit three terms that exhibit those properties
+         */
+
+        int min = 1000;
+        int max = 9999;
+
+        //from 1000 to 9999, get permutations, valid primes, and has common difference
+        List<List<Integer>> results = new ArrayList<>();
+
+        for (int i = min; i <= max; i++) {
+            //i must be a smallest number in result array list.
+
+            List<String> elements = new ArrayList<>(Arrays.asList(Integer.toString(i).split("")));
+            List<String> combs = new ArrayList<>(new HashSet<String>(getFullPermutations(elements)));
+            Collections.sort(combs);
+
+            List<Integer> result = new ArrayList<>();
+            result.add(i);
+
+            int diff = 0;
+            for (String comb : combs) {
+                int temp = Integer.parseInt(comb);
+                // < min, continue
+                if( temp < min ) continue;
+
+                // same as i, continue.
+                if( temp == i ) continue;
+
+                // valid primes
+                if( validPrimeNumber(temp) == false ) continue;
+
+                // add to result
+                result.add(temp);
+            }
+
+            if( result.size() >= 3 ) results.add(result);
+        }
+
+        //find numbers which have common difference
+        List<List<Integer>> newResults = new ArrayList<>();
+        for (List<Integer> result : results) {
+            for (int i = 0; i < result.size()-2; i++) {
+                for (int j = i+1; j < result.size()-1; j++) {
+                    int diff = result.get(j) - result.get(i);
+                    if (result.contains((Integer) (diff + result.get(j)))) {
+                        newResults.add(new ArrayList<Integer>(List.of(result.get(i), result.get(j), result.get(j) + diff)));
+                    }
+                }
+            }
+        }
+
+        for (List<Integer> newResult : newResults) {
+
+        }
+
+        //need to continue.
+
+    }
 
     /**********************************************************************************************************/
 
@@ -1804,7 +1866,7 @@ public class Solutions {
             elements.add(i + "");
         }
 
-        return getFullFactorial(elements);
+        return getFullPermutations(elements);
     }
 
     /**
@@ -2204,7 +2266,7 @@ public class Solutions {
      * @param elements : List of elements for factorial
      * @return ascending ordered factorial list made by all input elements.
      */
-    List<String> getFullFactorial(List<String> elements) {
+    List<String> getFullPermutations(List<String> elements) {
         List<String> resultList = new ArrayList<>();
 
         //sort input elements
@@ -2220,7 +2282,7 @@ public class Solutions {
             anotherElements.addAll(elements);
             anotherElements.remove(element);
 
-            List<String> recursiveResult = getFullFactorial(anotherElements);
+            List<String> recursiveResult = getFullPermutations(anotherElements);
 
             for (String s : recursiveResult) {
                 StringBuilder sb = new StringBuilder();
