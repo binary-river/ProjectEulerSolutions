@@ -1690,14 +1690,32 @@ public class Solutions {
         List<List<Integer>> results = new ArrayList<>();
 
         for (int i = min; i <= max; i++) {
-            //i must be a smallest number in result array list.
+            //do not add duplicated number.
+            boolean dupYn = false;
+            for (List<Integer> r : results) {
+                for (Integer integer : r) {
+                    if (integer == i) {
+                        System.out.println(integer + " = " + i + " index : " + r.indexOf((Integer) i) + " index2 : " + results.indexOf(r));
+                        dupYn = true;
+                        break;
+                    }
+                }
 
+                if( dupYn ) break;
+            }
+
+            if (dupYn) {
+                System.out.println("continue..");
+                continue;
+            }
+
+            //i must be a smallest number in result array list.
             List<String> elements = new ArrayList<>(Arrays.asList(Integer.toString(i).split("")));
             List<String> combs = new ArrayList<>(new HashSet<String>(getFullPermutations(elements)));
             Collections.sort(combs);
 
             List<Integer> result = new ArrayList<>();
-            result.add(i);
+//            result.add(i);
 
             int diff = 0;
             for (String comb : combs) {
@@ -1706,7 +1724,7 @@ public class Solutions {
                 if( temp < min ) continue;
 
                 // same as i, continue.
-                if( temp == i ) continue;
+//                if( temp == i ) continue;
 
                 // valid primes
                 if( validPrimeNumber(temp) == false ) continue;
@@ -1717,22 +1735,23 @@ public class Solutions {
 
             if( result.size() >= 3 ) results.add(result);
         }
+//
+//        //find numbers which have common difference
+//        List<List<Integer>> newResults = new ArrayList<>();
+//        for (List<Integer> result : results) {
+//            for (int i = 0; i < result.size()-2; i++) {
+//                for (int j = i+1; j < result.size()-1; j++) {
+//                    int diff = result.get(j) - result.get(i);
+//                    if (result.contains((Integer) (diff + result.get(j)))) {
+//                        newResults.add(new ArrayList<Integer>(List.of(result.get(i), result.get(j), result.get(j) + diff)));
+//                    }
+//                }
+//            }
+//        }
 
-        //find numbers which have common difference
-        List<List<Integer>> newResults = new ArrayList<>();
         for (List<Integer> result : results) {
-            for (int i = 0; i < result.size()-2; i++) {
-                for (int j = i+1; j < result.size()-1; j++) {
-                    int diff = result.get(j) - result.get(i);
-                    if (result.contains((Integer) (diff + result.get(j)))) {
-                        newResults.add(new ArrayList<Integer>(List.of(result.get(i), result.get(j), result.get(j) + diff)));
-                    }
-                }
-            }
-        }
-
-        for (List<Integer> newResult : newResults) {
-
+//            Collections.sort(result);
+            System.out.println(result.toString());
         }
 
         //need to continue.
