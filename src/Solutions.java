@@ -75,6 +75,7 @@ public class Solutions {
 //        solution47();
 //        solution48();
         solution49();
+//        solutionTest();
     }
 
 
@@ -1679,83 +1680,66 @@ public class Solutions {
 
     void solution49() {
         /**
-         * 1487, 4817, 8147 are terms they are all primes, and permutations each other.
+         * 1487, 4817, 8147 are terms they are all primes, permutations each other
+         * , and also subtract value of each other( bigger - smaller ) are same.
          * Find concatenation of anohter 4-digit three terms that exhibit those properties
          */
+
+        //after solving this problem, I found that calculating primes first would be faster than this.
+        //this solution will be rewrote as faster one.
 
         int min = 1000;
         int max = 9999;
 
-        //from 1000 to 9999, get permutations, valid primes, and has common difference
-        List<List<Integer>> results = new ArrayList<>();
+        //get permutations from 1000 to 9999. without duplicated array.
+        //if all of one array's elements are contained in another array, it's duplicated array.
+        List<List<Long>> permutaionsList = new ArrayList<>();
+        for (long i = min; i <= max; i++) {
 
-        for (int i = min; i <= max; i++) {
-            //do not add duplicated number.
-            boolean dupYn = false;
-            for (List<Integer> r : results) {
-                for (Integer integer : r) {
-                    if (integer == i) {
-                        System.out.println(integer + " = " + i + " index : " + r.indexOf((Integer) i) + " index2 : " + results.indexOf(r));
-                        dupYn = true;
-                        break;
-                    }
-                }
+            List<String> permutations = getFullPermutations(new ArrayList<String>(Arrays.stream(String.valueOf(i).split("")).toList()));
 
-                if( dupYn ) break;
-            }
+            //filtering 4 digit numbers
+            List<Long> fourDigitPermutations = permutations.stream().map(Long::parseLong).filter(l -> l >= min && l <= max).distinct().collect(Collectors.toList());
 
-            if (dupYn) {
-                System.out.println("continue..");
-                continue;
-            }
+            //valid dup number by compare itself
+            final long i2 = i;
+            if( fourDigitPermutations.stream().anyMatch(l -> l < i2 ) ) continue;
 
-            //i must be a smallest number in result array list.
-            List<String> elements = new ArrayList<>(Arrays.asList(Integer.toString(i).split("")));
-            List<String> combs = new ArrayList<>(new HashSet<String>(getFullPermutations(elements)));
-            Collections.sort(combs);
+            //valid primes and digits
+            List<Long> primePermutations = fourDigitPermutations.stream().filter(l -> validPrimeNumber(l)).collect(Collectors.toList());
 
-            List<Integer> result = new ArrayList<>();
-//            result.add(i);
+            if( primePermutations.size() < 3 ) continue;
 
-            int diff = 0;
-            for (String comb : combs) {
-                int temp = Integer.parseInt(comb);
-                // < min, continue
-                if( temp < min ) continue;
+            permutaionsList.add(primePermutations);
 
-                // same as i, continue.
-//                if( temp == i ) continue;
-
-                // valid primes
-                if( validPrimeNumber(temp) == false ) continue;
-
-                // add to result
-                result.add(temp);
-            }
-
-            if( result.size() >= 3 ) results.add(result);
-        }
-//
-//        //find numbers which have common difference
-//        List<List<Integer>> newResults = new ArrayList<>();
-//        for (List<Integer> result : results) {
-//            for (int i = 0; i < result.size()-2; i++) {
-//                for (int j = i+1; j < result.size()-1; j++) {
-//                    int diff = result.get(j) - result.get(i);
-//                    if (result.contains((Integer) (diff + result.get(j)))) {
-//                        newResults.add(new ArrayList<Integer>(List.of(result.get(i), result.get(j), result.get(j) + diff)));
-//                    }
+            //valid dup number by brute force. --> depricated
+//            boolean dupYn = primePermutations.stream().anyMatch(l -> {
+//                for (List<Long> aList : permutaionsList) {
+//                    if( aList.stream().anyMatch(l2 -> l2.equals(l)) ) return true;
 //                }
-//            }
-//        }
+//                return false;
+//            });
+//            if( !dupYn ) permutaionsList.add(primePermutations);
 
-        for (List<Integer> result : results) {
-//            Collections.sort(result);
-            System.out.println(result.toString());
         }
 
-        //need to continue.
+        //get concatenated 4-digit numbers which has properties question suggested
+        for (List<Long> longList : permutaionsList) {
+            for (int i = 0; i <longList.size()-1; i++) {
+                for (int j = i+1; j < longList.size(); j++) {
+                    long diff = longList.get(j) - longList.get(i);
+                    int idx = longList.indexOf(longList.get(j) + diff);
+                    if( idx != -1 ) System.out.println("result : " + longList.get(i) + longList.get(j) + longList.get(idx));
+                }
+            }
+        }
+    }
 
+
+    void solutionTest() {
+        List<String> fullPermutations = getFullPermutations(new ArrayList<String>((List.of("1", "0", "0", "2"))));
+
+        fullPermutations.stream().forEach(System.out::println);
     }
 
     /**********************************************************************************************************/
