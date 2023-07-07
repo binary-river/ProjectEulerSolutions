@@ -74,7 +74,8 @@ public class Solutions {
 //        solution46();
 //        solution47();
 //        solution48();
-        solution49();
+//        solution49();
+        solution49_Improved();
 //        solutionTest();
     }
 
@@ -1733,6 +1734,59 @@ public class Solutions {
                 }
             }
         }
+    }
+    
+    void solution49_Improved() {
+        /**
+         * Solution 49 improved version.
+         * Find 4-digit numbers which are permutation each other and has same common difference as sequence after getting primes first.
+         */
+
+        long min  = 1000L;
+        long max  = 9999L;
+
+        //get primes from 1000 to 9999
+        List<Long> primes = new ArrayList<>();
+        for (long l = min; l <= max; l++) {
+            if( validPrimeNumber(l) ) primes.add(l);
+        }
+
+        //iter
+        for (Long prime : primes) {
+
+            int[] temp = prime.toString().chars().map(c -> c - '0').toArray();
+            Arrays.sort(temp);
+
+            //valid permutations by comparing sorted string
+            List<Long> permutations = primes.stream().filter(l -> {
+                int[] temp2 = l.toString().chars().map(c -> c - '0').toArray();
+                Arrays.sort(temp2);
+                if (Arrays.equals(temp, temp2)) return true;
+
+                return false;
+            }).sorted().collect(Collectors.toList());
+
+            //valid already checked permutations.
+            if( permutations.stream().anyMatch(l -> l<prime) ) continue;
+
+            //minimum list size check
+            if( permutations.size() < 3 ) continue;
+
+            //find 3rd number has common difference between 1st and 2nd numbers
+            List<Long> result = new ArrayList<>();
+            permutations.stream().forEach(p -> {
+                permutations.stream().forEach(p2 -> {
+                    if ( p2 != p && p2 > p && permutations.contains((p2 + p2 - p))) {
+                        result.add(p);
+                        result.add(p2);
+                        result.add(p2 * 2 - p);
+                    }
+                });
+            });
+
+            if( result.size() >= 3 ) System.out.println(result.stream().map(l -> l+"").collect(Collectors.joining(",")));
+        }
+
     }
 
 
