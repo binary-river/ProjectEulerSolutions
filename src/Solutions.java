@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -75,7 +76,9 @@ public class Solutions {
 //        solution47();
 //        solution48();
 //        solution49();
-        solution49_Improved();
+//        solution49_Improved();
+        solution50();
+        solution50_WithList();
 //        solutionTest();
     }
 
@@ -1787,6 +1790,96 @@ public class Solutions {
             if( result.size() >= 3 ) System.out.println(result.stream().map(l -> l+"").collect(Collectors.joining(",")));
         }
 
+    }
+
+    void solution50() {
+        /** The prime 41 can be written as the sum of six consecutive primes: 2 + 3 + 5 + 7 + 11 + 13.
+         *  Which prime, below one-million, can be written as the sum of the most consecutive primes?
+         */
+
+        //Find primes under one-million
+        int limit = 1000000;
+        long[] primes = new long[limit]; // length : limit
+        int len = 0; //length of primes
+        for (long l = 2; l <= limit; l++) {
+            if (!validPrimeNumber(l)) continue;
+            primes[len++] = l;
+        }
+
+        int maxCountOfConsecutives = 1;
+        long numberWithMaxCount = 0L;
+        int left = 0;
+        int right = left+1;
+
+        //from 0(left position) to next index(right position), check if sum of primes is prime and under one million.
+        //if true, then move right position to next index.
+        //if false, save current consecutive count and move left position to next index.
+        while (true) {
+            int count = right - left + 1;
+            long temp = 0L;
+            for (int i = left; i <= right; i++) temp += primes[i];
+            //long temp = Arrays.stream(Arrays.copyOfRange(primes, left, right)).sum();
+
+            if ( count > maxCountOfConsecutives && temp <= limit && validPrimeNumber(temp)) {
+                maxCountOfConsecutives = count;
+                numberWithMaxCount = temp;
+            }
+
+            right++;
+            if( right >= len-1 || temp >= limit ){
+                left++;
+                right = left + maxCountOfConsecutives;
+            }
+
+            if( left >= len-1 || right >= len - 1 ) break;
+        }
+
+        System.out.println("maxCountOfConsecutives : " + maxCountOfConsecutives );
+        System.out.println("numberWithMaxCount     : " + numberWithMaxCount     );
+    }
+
+    void solution50_WithList() {
+        /** The prime 41 can be written as the sum of six consecutive primes: 2 + 3 + 5 + 7 + 11 + 13.
+         *  Which prime, below one-million, can be written as the sum of the most consecutive primes?
+         */
+
+        //Find primes under one-million
+        long limit = 1000000L;
+        List<Long> primes = new ArrayList<>();
+        for (long l = 2; l < limit ; l++) {
+            if( validPrimeNumber(l) ) primes.add(l);
+        }
+
+        System.out.println("size : " + primes.size());
+
+        int maxCountOfConsecutives = 1;
+        long numberWithMaxCount = 0L;
+        int left = 0;
+        int right = left+1;
+
+        //from 0(left position) to next index(right position), check if sum of primes is prime and under one million.
+        //if true, then move right position to next index.
+        //if false, save current consecutive count and move left position to next index.
+        while (true) {
+            int count = right - left + 1;
+            long temp = primes.subList(left, right).stream().reduce(0L, Long::sum);
+
+            if ( count > maxCountOfConsecutives && temp <= limit && validPrimeNumber(temp)) {
+                maxCountOfConsecutives = count;
+                numberWithMaxCount = temp;
+            }
+
+            right++;
+            if( right >= primes.size() || temp >= limit ){
+                left++;
+                right = left + maxCountOfConsecutives;
+            }
+
+            if( left >= primes.size() || right > primes.size() ) break;
+        }
+
+        System.out.println("maxCountOfConsecutives : " + maxCountOfConsecutives );
+        System.out.println("numberWithMaxCount     : " + numberWithMaxCount     );
     }
 
 
