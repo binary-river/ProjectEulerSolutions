@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.IntConsumer;
+import java.util.function.LongFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -77,8 +78,9 @@ public class Solutions {
 //        solution48();
 //        solution49();
 //        solution49_Improved();
-        solution50();
-        solution50_WithList();
+//        solution50();
+//        solution50_WithList();
+        solution51();
 //        solutionTest();
     }
 
@@ -1882,14 +1884,89 @@ public class Solutions {
         System.out.println("numberWithMaxCount     : " + numberWithMaxCount     );
     }
 
+    void solution51() {
+        /**
+         * By replacing the 1st digit of the 2-digit number *3, it turns out that six of the nine possible values: 13, 23, 43, 53, 73, and 83, are all prime.
+         * By replacing the 3rd and 4th digits of 56**3 with the same digit, this 5-digit number is the first example having seven primes among the ten generated numbers
+         * , yielding the family: 56003, 56113, 56333, 56443, 56663, 56773, and 56993. Consequently 56003, being the first member of this family
+         * , is the smallest prime with this property.
+         * Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits) with the same digit, is part of an eight prime value family.
+         */
+
+        long num = 9L;  //start from 2-digit number
+
+        while (true) {
+            num++;
+            if( num == Long.MAX_VALUE ) break;
+
+            //check prime
+            if( !validPrimeNumber(num) ) continue;
+
+            long smallestPrimeWithReplacedNumbers = getSmallestPrimeWithReplacedNumbers(num, 8);
+
+            if (smallestPrimeWithReplacedNumbers != -1) {
+                System.out.println("result : " + smallestPrimeWithReplacedNumbers );
+                break;
+            }
+        }
+    }
+
 
     void solutionTest() {
-        List<String> fullPermutations = getFullPermutations(new ArrayList<String>((List.of("1", "0", "0", "2"))));
-
-        fullPermutations.stream().forEach(System.out::println);
+//        System.out.println(getDigitCount(1L));
     }
 
     /**********************************************************************************************************/
+
+    /**
+     * get smallest prime number in primes made of replaced input number.
+     * ex. if input number is 56003 -> then 0,0 are same digits. this digits will be replaced to same number as 11, 22, 33..
+     * then 56113, 56223...
+     * In this list, primes are 56003, 56113, 56333, 56443, 56663, 56773, and 56993.
+     * Smallest prime is 56003. so return 56003.
+     * if there's no same digits or can't make primes as many as input cnt, then return -1
+     * @param num
+     * @param cnt
+     * @return smallest primes or -1
+     */
+    long getSmallestPrimeWithReplacedNumbers(long num, int cnt) {
+        int[] numArr = Arrays.stream(Long.valueOf(num).toString().split("")).mapToInt(Integer::valueOf).toArray();
+
+        //at least 2 digit number.
+        if( numArr.length <= 1 ) return -1;
+
+        //needs to have same digits
+        int[] dupChecker = new int[10];  // has 0~9 index.
+        Arrays.stream(numArr).forEach(i -> dupChecker[i] = dupChecker[i] + 1);
+
+        if( Arrays.stream(dupChecker).allMatch( i -> (i == 0 || i == 1) ) ) return -1;
+
+        Set<Integer> dupNums = new HashSet<>();
+        for (int i = 0; i < dupChecker.length; i++) {
+            if( dupChecker[i] >= 2 ) dupNums.add(i);
+        }
+
+        //replace dup and valid primes.
+        for (Integer dupNum : dupNums) {
+            List<Long> result = new ArrayList<>();
+
+            for (int i = 0; i <=9; i++) {
+                final int d = i;
+                String replaceString = Arrays.stream(numArr).map(v -> v == dupNum ? d : v).mapToObj(String::valueOf).reduce("",String::concat);
+                if( replaceString.charAt(0) == '0' ) continue;
+
+                Long replacedLong = Long.parseLong(replaceString);
+                if ( validPrimeNumber(replacedLong) ) result.add(replacedLong);
+            }
+
+            if (result.size() >= cnt) {
+                result.sort((l1, l2) -> l1 > l2 ? 1 : l1 == l2 ? 0 : -1);
+                return result.get(0);
+            }
+        }
+
+        return -1;
+    }
 
     /**
      * get how many consecutive numbers have distinct prime numbers as input targetDistinctPrimeCount.
