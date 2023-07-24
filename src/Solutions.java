@@ -80,7 +80,8 @@ public class Solutions {
 //        solution49_Improved();
 //        solution50();
 //        solution50_WithList();
-        solution51();
+//        solution51();
+        solution52();
 //        solutionTest();
     }
 
@@ -1911,12 +1912,65 @@ public class Solutions {
         }
     }
 
+    void solution52() {
+        /**
+         * It can be seen that the number 125874 and its double 251748 contain exactly the same digits, but in a different order.
+         * Find the smallest positive integer x such that 2x 3x 4x 5x and 6x contain the same digits.
+         */
+
+        int result = 0;
+        int num = 1;
+        while (num < Integer.MAX_VALUE / 6) {
+
+            boolean foundYn = true;
+            for (int i = 1; i <= 6; i++) {
+                if( !(foundYn = compareDigits(num, i * num)) ) break;
+            }
+
+            if (foundYn) {
+                result = num;
+                break;
+            }
+
+            num++;
+        }
+
+        System.out.println("result : " + result);
+
+    }
+
 
     void solutionTest() {
 //        System.out.println(getDigitCount(1L));
     }
 
     /**********************************************************************************************************/
+
+    /**
+     * compare 2 numbers whether they have same digits at all.
+     * for example, 12345 and 54321 have same digits at all, so return true.
+     * 12345 and 54320 have different digits. 1 and 0. so return false.
+     * @param numA
+     * @param numB
+     * @return true if numA and numB have same digits at all
+     * otherwise, return false.
+     */
+    boolean compareDigits(int numA, int numB) {
+        List<String> numAs = Arrays.stream(String.valueOf(numA).split("")).collect(Collectors.toList());
+        List<String> numBs = Arrays.stream(String.valueOf(numB).split("")).collect(Collectors.toList());
+
+        //length
+        if( numAs.size() != numBs.size() ) return false;
+
+        //elements
+        for (String a : numAs) {
+            numBs.remove(a);
+        }
+
+        if( numBs.size() > 0) return false;
+
+        return true;
+    }
 
     /**
      * get smallest prime number in primes made of replaced input number.
@@ -2043,10 +2097,11 @@ public class Solutions {
         double result = 0.0;
 
         switch(e){
-            case TRIANGLE -> result = (Math.sqrt(8 * r + 1) - 1) / 2;
+            case TRIANGLE ->  result = (Math.sqrt(8 * r + 1) - 1) / 2;
             case PENTAGONAL -> result = (Math.sqrt(24 * r + 1) + 1) / 6;
             case HEXAGONAL -> result = (Math.sqrt(8 * r + 1) + 1) / 4;
         }
+
         return result;
     }
 
