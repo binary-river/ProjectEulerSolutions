@@ -2,6 +2,7 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -81,7 +82,8 @@ public class Solutions {
 //        solution50();
 //        solution50_WithList();
 //        solution51();
-        solution52();
+//        solution52();
+        solution53();
 //        solutionTest();
     }
 
@@ -1939,12 +1941,65 @@ public class Solutions {
 
     }
 
+    void solution53() {
+        /**
+         * How many, not necessarily distinct, values of nCr ( 1 <= n <= 100 ) are greater than one-million?
+         */
+
+        int n = 1;
+        BigInteger standard = BigInteger.valueOf(1000000L);
+        int result = 0;
+
+        while (n <= 100) {
+            for (int r = 1; r <= n; r++) {
+                BigInteger combination;
+                if( (combination = getCombinationBig(n,r)).compareTo(standard) <= 0 ) continue;
+
+                result++;
+                System.out.println("n : " + n + ", r : " + r + ", combination : " + combination.toString());
+            }
+            n++;
+        }
+
+        System.out.println("result : " + result);
+
+    }
+
 
     void solutionTest() {
-//        System.out.println(getDigitCount(1L));
+//        System.out.println(getCombinationBig(24, 10).toString());
     }
 
     /**********************************************************************************************************/
+
+    /**
+     * Get combinations. Use big integer when calculate combination for large number.
+     * @param n
+     * @param r
+     * @return result of n Combination r ( nCr )
+     */
+    BigInteger getCombinationBig(int n, int r) {
+
+        // n! / r! * (n-r)!
+
+        //get numerator
+        BigInteger numerator = BigInteger.valueOf(1L);
+        for (long i = 1L; i <= n ; i++) {
+            numerator = numerator.multiply(BigInteger.valueOf(i));
+        }
+
+        //get denominator
+        BigInteger denominator = BigInteger.valueOf(1L);
+        for (long i = 1L; i <= r ; i++) {
+            denominator = denominator.multiply(BigInteger.valueOf(i));
+        }
+
+        for (long i = 1L; i <= (n-r) ; i++) {
+            denominator = denominator.multiply(BigInteger.valueOf(i));
+        }
+
+        return numerator.divide(denominator);
+    }
 
     /**
      * compare 2 numbers whether they have same digits at all.
