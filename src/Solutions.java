@@ -1978,21 +1978,121 @@ public class Solutions {
 
     void solutionTest() {
 //        System.out.println(getCombinationBig(24, 10).toString());
-
+        String[] test = {"9H", "JH", "QH", "KH", "AH"};
+        getHighCards(test);
     }
 
     /**********************************************************************************************************/
 
     enum Cards{
-        HIGH_CARD, ONE_PAIR, TWO_PAIRS, THREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
+          HIGH_CARD(1)
+        , ONE_PAIR(2)
+        , TWO_PAIRS(3)
+        , THREE_OF_A_KIND(4)
+        , STRAIGHT(5)
+        , FLUSH(6)
+        , FULL_HOUSE(7)
+        , FOUR_OF_A_KIND(8)
+        , STRAIGHT_FLUSH(9)
+        , ROYAL_FLUSH(10);
+
+        private int value;
+
+        Cards(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     /**
-     * @param hands poker hands as integer arrays ( 2 ~ 9, J,Q,K,A )
+     * @param hands poker hands as string arrays( 2 ~ 9, J,Q,K,A )
      * @return Map of higest rank of hands by enum, highest values as 5-length integer array for comparing when ranks tied.
      */
     Map<Cards, int[]> getHighCards(String[] hands) {
+        /*
+        Royal Flush     : 9JQKA + [Flush]
+        Straight Flush  : [Straight] + [Flush]
+        Four of a Kind  : Four cards of the same value
+        Full House      : [Three of a kind] + [one pair]
+        Flush           : All cards of the same suit
+        Straight        : All cards are consecutive values
+        Three of a Kind : Three cards of the same value
+        Two Pairs       : Two different pairs
+        One Pairs       : Two cards of the same value
+        High Cards      : Highest value card.
+         */
 
+        // Only flush need suit
+
+
+        // Copy only value ( not suit ) of input, replace JQKA to 10,11,12,13. Then Sort
+        Integer[] handsOn = Arrays.stream(hands).map(s -> {
+            int v = switch (s.charAt(0)) {
+                case 'J' -> 10;
+                case 'Q' -> 11;
+                case 'K' -> 12;
+                case 'A' -> 13;
+                default -> s.charAt(0) - '0';
+            };
+
+            return v;
+        }).sorted().toArray(Integer[]::new);
+
+
+        // Summary of hands. by same value.
+        Map<Integer, Integer> handsOnReady = new HashMap<>();
+
+        Arrays.stream(handsOn).forEach( card -> {
+            Integer count = handsOnReady.get(card);
+            count = count == null ? 0 : count;
+            handsOnReady.put(card, ++count);
+        });
+
+
+        // Whether hands are in rank by boolean
+        Collection<Integer> values = handsOnReady.values();
+//        System.out.println(values.stream().map( i -> i + "").collect(Collectors.joining(",")));
+        Map<Cards, Boolean> handsOnRank = new HashMap<>();
+        handsOnRank.put(Cards.ONE_PAIR, Collections.frequency(values, 2) == 1);
+        handsOnRank.put(Cards.TWO_PAIRS, Collections.frequency(values, 2) == 2);
+        handsOnRank.put(Cards.THREE_OF_A_KIND, Collections.frequency(values, 3) == 1);
+        handsOnRank.put(Cards.STRAIGHT, IntStream.range(0, handsOn.length - 2).allMatch(i -> {
+            return handsOn[i] + 1 == handsOn[i + 1];
+        }));
+        handsOnRank.put(Cards.FLUSH, IntStream.range(0, hands.length - 2).allMatch(i -> {
+            return hands[i].charAt(1) == hands[i + 1].charAt(1);
+        }));
+        handsOnRank.put(Cards.FULL_HOUSE, handsOnRank.get(Cards.THREE_OF_A_KIND) && handsOnRank.get(Cards.ONE_PAIR));
+        handsOnRank.put(Cards.FOUR_OF_A_KIND, Collections.frequency(values, 4) == 1);
+        handsOnRank.put(Cards.STRAIGHT_FLUSH, handsOnRank.get(Cards.STRAIGHT) && handsOnRank.get(Cards.FLUSH));
+        //handsOnRank.put(Cards.ROYAL_FLUSH, Arrays.stream(hands).collect(Collectors.joining("")).equals("9JQKA") && handsOnRank.get(Cards.FLUSH));// need to edit'
+
+
+        //handsOn, handsOnReady, handsOnRank
+
+        handsOnRank.forEach( (c, v) -> {
+            System.out.println( "Card : " + c.name()  + ", value : " + v);
+        });
+
+        return null;
+
+        /**
+         * In the card game poker, a hand consists of five cards and are ranked, from lowest to highest, in the following way:
+         *
+         * High Card: Highest value card.
+         * One Pair: Two cards of the same value.
+         * Two Pairs: Two different pairs.
+         * Three of a Kind: Three cards of the same value.
+         * Straight: All cards are consecutive values.
+         * Flush: All cards of the same suit.
+         * Full House: Three of a kind and a pair.
+         * Four of a Kind: Four cards of the same value.
+         * Straight Flush: All cards are consecutive values of same suit.
+         * Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+         */
     }
 
 
