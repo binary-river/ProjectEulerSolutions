@@ -83,8 +83,9 @@ public class Solutions {
 //        solution50_WithList();
 //        solution51();
 //        solution52();
-        solution53();
-//        solutionTest();
+//        solution53();
+        solution54();
+        solutionTest();
     }
 
 
@@ -1962,15 +1963,38 @@ public class Solutions {
         }
 
         System.out.println("result : " + result);
+    }
 
+
+    void solution54() {
+        try {
+            String fileName = "./src/input/solution54_input.txt";
+            String[][] hands = getFileBySquareArray(new File(fileName), " ");
+        } catch (Exception e) {
+
+        }
     }
 
 
     void solutionTest() {
 //        System.out.println(getCombinationBig(24, 10).toString());
+
     }
 
     /**********************************************************************************************************/
+
+    enum Cards{
+        HIGH_CARD, ONE_PAIR, TWO_PAIRS, THREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
+    }
+
+    /**
+     * @param hands poker hands as integer arrays ( 2 ~ 9, J,Q,K,A )
+     * @return Map of higest rank of hands by enum, highest values as 5-length integer array for comparing when ranks tied.
+     */
+    Map<Cards, int[]> getHighCards(String[] hands) {
+
+    }
+
 
     /**
      * Get combinations. Use big integer when calculate combination for large number.
