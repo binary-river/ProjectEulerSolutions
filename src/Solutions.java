@@ -1,8 +1,10 @@
 import org.w3c.dom.ls.LSOutput;
+import oshi.util.ExecutingCommand;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.sql.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,6 +18,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.lang.System.getenv;
 
 public class Solutions {
 
@@ -84,7 +88,7 @@ public class Solutions {
 //        solution51();
 //        solution52();
 //        solution53();
-        solution54();
+//        solution54();
         solutionTest();
     }
 
@@ -1978,8 +1982,33 @@ public class Solutions {
 
     void solutionTest() {
 //        System.out.println(getCombinationBig(24, 10).toString());
-        String[] test = {"9H", "JH", "QH", "KH", "AH"};
-        getHighCards(test);
+        String gradleHome = getenv("GRADLE_HOME");
+        System.out.println("result : " + gradleHome);
+
+        String command = gradleHome + "/bin/gradle -version";
+
+        command = "C:\\Maven\\apache-maven-3.9.3\\bin\\mvn -version";
+        List<String> strings = ExecutingCommand.runNative(command.split(" "));
+
+        try {
+            Process p = Runtime.getRuntime().exec(command, null);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(p.getInputStream(), Charset.defaultCharset()));
+            String t;
+            while( (t = bufferedReader.readLine()) != null ){
+                System.out.println("t : " + t);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        com.sun.jna.Platform.isWindows();
+
+        System.out.println("command : " + command);
+//        for (String string : strings) {
+//            System.out.println("string : " + string);
+//        }
+
     }
 
     /**********************************************************************************************************/
